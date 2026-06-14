@@ -54,7 +54,7 @@
 
     body {
       overflow-x: hidden;
-      background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+      background: #f0f0f0;
       color: var(--text);
       font-family: 'Geist', sans-serif;
       font-weight: 600;
