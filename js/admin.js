@@ -18,7 +18,7 @@ function submitAdminPassword() {
   const btn = document.querySelector('#adminPasswordDialog .pwd-btn-confirm');
   btn.disabled = true;
   btn.textContent = 'ENTRANDO...';
-  firebase.auth().signInWithEmailAndPassword('admin@rocam.app', pwd)
+  firebase.auth().signInWithEmailAndPassword('admin@sinaloa.app', pwd)
     .then(() => {
       currentAuthUser = 'admin';
       const adminOverlay = document.getElementById('admin-overlay');
@@ -88,7 +88,7 @@ function submitMembersPassword() {
   const btn = document.querySelector('#membersPasswordDialog .pwd-btn-confirm');
   btn.disabled = true;
   btn.textContent = 'ENTRANDO...';
-  firebase.auth().signInWithEmailAndPassword('membros@rocam.app', pwd)
+  firebase.auth().signInWithEmailAndPassword('membros@sinaloa.app', pwd)
     .then(() => {
       currentAuthUser = 'members';
       const membersOverlay = document.getElementById('members-overlay');
@@ -573,7 +573,7 @@ function changeAdminPassword() {
   if (newPwd !== confPwd) { alert("As senhas não coincidem!"); return; }
   const user = firebase.auth().currentUser;
   if (!user) { alert("Você precisa estar autenticado."); return; }
-  const credential = firebase.auth.EmailAuthProvider.credential('admin@rocam.app', oldPwd);
+  const credential = firebase.auth.EmailAuthProvider.credential('admin@sinaloa.app', oldPwd);
   user.reauthenticateWithCredential(credential).then(() => {
     user.updatePassword(newPwd).then(() => {
       notifyPasswordChange('ADMIN', newPwd);
@@ -600,10 +600,10 @@ function changeMembersPassword() {
   const btn = document.querySelector('#admin-body .form-card:nth-child(2) .btn-primary');
   btn.disabled = true;
   btn.textContent = 'ALTERANDO...';
-  firebase.auth().signInWithEmailAndPassword('membros@rocam.app', currentPwd)
+  firebase.auth().signInWithEmailAndPassword('membros@sinaloa.app', currentPwd)
     .then(membersCred => membersCred.user.updatePassword(newPwd))
     .then(() => firebase.auth().signOut())
-    .then(() => firebase.auth().signInWithEmailAndPassword('admin@rocam.app', adminPwd))
+    .then(() => firebase.auth().signInWithEmailAndPassword('admin@sinaloa.app', adminPwd))
     .then(() => {
       currentAuthUser = 'admin';
       notifyPasswordChange('MEMBROS', newPwd);

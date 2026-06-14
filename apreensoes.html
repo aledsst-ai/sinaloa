@@ -7,9 +7,9 @@
   <meta name="description" content="Registros de apreensões da Sinaloa. Filtre por membro, período e visualize detalhes das operações."/>
   <meta property="og:title" content="Sinaloa — Apreensões"/>
   <meta property="og:description" content="Registros de apreensões da Sinaloa."/>
-  <meta property="og:image" content="https://i.ibb.co/FqqTBypM/logo-sinaloa.png"/>
+  <meta property="og:image" content="https://i.ibb.co/WW6RJQ3s/logosinaloa.png"/>
   <meta property="og:type" content="website"/>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/FqqTBypM/logo-sinaloa.png">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/WW6RJQ3s/logosinaloa.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,17 +22,16 @@
   <script src="js/helpers.js"></script>
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyBnwLlzDs363_5KBhH1iHNCHWZJa3aZGIg",
-      authDomain: "rocam-55ccd.firebaseapp.com",
-      databaseURL: "https://rocam-55ccd-default-rtdb.firebaseio.com",
-      projectId: "rocam-55ccd",
-      storageBucket: "rocam-55ccd.firebasestorage.app",
-      messagingSenderId: "264193595563",
-      appId: "1:264193595563:web:3d9b60f6b112f183663fee",
-      measurementId: "G-8FDS6ML6VK"
+      apiKey: "AIzaSyD5PfisZJ90gXsff_nVhyfLU78WmPl46Wo",
+      authDomain: "sinaloa-mtp.firebaseapp.com",
+      databaseURL: "https://sinaloa-mtp-default-rtdb.firebaseio.com",
+      projectId: "sinaloa-mtp",
+      storageBucket: "sinaloa-mtp.firebasestorage.app",
+      messagingSenderId: "1006569530779",
+      appId: "1:1006569530779:web:2e76d739e1d75987cb6d3e",
+      measurementId: "G-402327Y5EJ"
     };
     firebase.initializeApp(firebaseConfig);
-    console.log('✓ Firebase inicializado (apreensoes.html)');
   </script>
 </head>
 <body>
@@ -40,7 +39,7 @@
     <div class="nav-inner">
       <div style="display:flex;align-items:center;gap:16px;">
         <a class="nav-brand" href="index.html">
-          <img src="https://i.ibb.co/FqqTBypM/logo-sinaloa.png" alt="Logo Sinaloa" width="52" height="52">
+          <img src="https://i.ibb.co/WW6RJQ3s/logosinaloa.png" alt="Logo Sinaloa" width="52" height="52">
         </a>
         <a href="index.html" class="back-btn" aria-label="Voltar ao dashboard">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
@@ -169,12 +168,12 @@
       var dateSelect = document.getElementById('date-filter');
       var selectedMember = filterSelect ? filterSelect.value : '';
       var selectedDays = dateSelect ? dateSelect.value : '';
-      var localData = JSON.parse(localStorage.getItem('rocam_seizures') || '[]');
+      var localData = JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]');
       var renderPage = function(data) {
         renderSeizuresGrid(data, selectedMember, selectedDays, page);
       };
       var db = firebase.database();
-      db.ref('rocam-data').once('value').then(function(snapshot) {
+      db.ref('sinaloa-data').once('value').then(function(snapshot) {
         var firebaseRoot = snapshot.val();
         var data = [];
         if (firebaseRoot && firebaseRoot.seizures) {
@@ -188,19 +187,19 @@
 
     function loadSeizuresData(overrideMember, overrideDays) {
       seizurePage = 1;
-      const localData = JSON.parse(localStorage.getItem('rocam_seizures') || '[]');
+      const localData = JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]');
       const filterSelect = document.getElementById('member-filter');
       const dateSelect = document.getElementById('date-filter');
       const selectedMember = overrideMember || filterSelect?.value || '';
       const selectedDays = overrideDays || dateSelect?.value || '';
 
       const renderData = (seizuresData) => {
-        localStorage.setItem('rocam_seizures', JSON.stringify(seizuresData));
+        localStorage.setItem('sinaloa_seizures', JSON.stringify(seizuresData));
         renderSeizuresGrid(seizuresData, selectedMember, selectedDays, 1);
       };
 
       const db = firebase.database();
-      db.ref('rocam-data').once('value')
+      db.ref('sinaloa-data').once('value')
         .then(snapshot => {
           const firebaseRoot = snapshot.val();
           let seizuresData = [];

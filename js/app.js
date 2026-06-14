@@ -83,7 +83,7 @@ function initEventListeners() {
 
 window.addEventListener('DOMContentLoaded', () => {
   const intro = document.getElementById('intro');
-  const splashShown = sessionStorage.getItem('rocamSplashShown') === 'true';
+  const splashShown = sessionStorage.getItem('sinaloaSplashShown') === 'true';
   
   console.log('🔄 DOMContentLoaded iniciado');
   console.log('intro elemento:', intro ? '✓ encontrado' : '✗ não encontrado');
@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', () => {
         setTimeout(initRevealOnScroll, 300);
       };
       intro.addEventListener('transitionend', onTransitionEnd);
-      sessionStorage.setItem('rocamSplashShown', 'true');
+      sessionStorage.setItem('sinaloaSplashShown', 'true');
     }
   };
   

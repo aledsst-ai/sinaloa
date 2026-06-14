@@ -93,15 +93,15 @@ function loadData() {
     }
     
     try {
-      const localMembers = localStorage.getItem('rocam_members');
+      const localMembers = localStorage.getItem('sinaloa_members');
       if (localMembers) {
         members = sanitizeMembersData(JSON.parse(localMembers));
-        vehicles = JSON.parse(localStorage.getItem('rocam_vehicles') || '[]');
-        seizures = JSON.parse(localStorage.getItem('rocam_seizures') || '[]');
-        gallery = JSON.parse(localStorage.getItem('rocam_gallery') || '[]');
-        const savedRankOrder = localStorage.getItem('rocam_rankOrder');
+        vehicles = JSON.parse(localStorage.getItem('sinaloa_vehicles') || '[]');
+        seizures = JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]');
+        gallery = JSON.parse(localStorage.getItem('sinaloa_gallery') || '[]');
+        const savedRankOrder = localStorage.getItem('sinaloa_rankOrder');
         rankOrder = savedRankOrder ? JSON.parse(savedRankOrder) : {};
-        localStorage.setItem('rocam_members', JSON.stringify(members));
+        localStorage.setItem('sinaloa_members', JSON.stringify(members));
         console.log('💾 Dados carregados de localStorage e normalizados');
       }
     } catch(e) {
@@ -110,9 +110,9 @@ function loadData() {
     
     try {
       const db = firebase.database();
-      const dataRef = db.ref('rocam-data');
+      const dataRef = db.ref('sinaloa-data');
       
-      console.log('📥 Registrando listener do Firebase para rocam-data (primeira vez)');
+      console.log('📥 Registrando listener do Firebase para sinaloa-data (primeira vez)');
       dataListenerRegistered = true;
       
       dataRef.on('value', (snapshot) => {
@@ -193,11 +193,11 @@ function saveData() {
     };
     
     try {
-      localStorage.setItem('rocam_members', JSON.stringify(members));
-      localStorage.setItem('rocam_vehicles', JSON.stringify(vehicles));
-      localStorage.setItem('rocam_seizures', JSON.stringify(seizures));
-      localStorage.setItem('rocam_gallery', JSON.stringify(gallery));
-      localStorage.setItem('rocam_rankOrder', JSON.stringify(rankOrder));
+      localStorage.setItem('sinaloa_members', JSON.stringify(members));
+      localStorage.setItem('sinaloa_vehicles', JSON.stringify(vehicles));
+      localStorage.setItem('sinaloa_seizures', JSON.stringify(seizures));
+      localStorage.setItem('sinaloa_gallery', JSON.stringify(gallery));
+      localStorage.setItem('sinaloa_rankOrder', JSON.stringify(rankOrder));
       console.log('✓ Dados salvos em localStorage');
     } catch(e) {
       console.warn('⚠️ Erro ao salvar em localStorage:', e);
@@ -205,9 +205,9 @@ function saveData() {
     
     try {
       const db = firebase.database();
-      const dataRef = db.ref('rocam-data');
+      const dataRef = db.ref('sinaloa-data');
       
-      console.log('📡 Enviando dados para Firebase em rocam-data');
+      console.log('📡 Enviando dados para Firebase em sinaloa-data');
       dataRef.set(dataToSave, (error) => {
         if (error) {
           console.error('❌ Erro ao salvar no Firebase:', error);
@@ -225,13 +225,14 @@ function saveData() {
   }
 }
 const firebaseConfig = {
-  apiKey: "AIzaSyBnwLlzDs363_5KBhH1iHNCHWZJa3aZGIg",
-  authDomain: "rocam-55ccd.firebaseapp.com",
-  projectId: "rocam-55ccd",
-  storageBucket: "rocam-55ccd.firebasestorage.app",
-  messagingSenderId: "264193595563",
-  appId: "1:264193595563:web:3d9b60f6b112f183663fee",
-  measurementId: "G-8FDS6ML6VK"
+  apiKey: "AIzaSyD5PfisZJ90gXsff_nVhyfLU78WmPl46Wo",
+  authDomain: "sinaloa-mtp.firebaseapp.com",
+  databaseURL: "https://sinaloa-mtp-default-rtdb.firebaseio.com",
+  projectId: "sinaloa-mtp",
+  storageBucket: "sinaloa-mtp.firebasestorage.app",
+  messagingSenderId: "1006569530779",
+  appId: "1:1006569530779:web:2e76d739e1d75987cb6d3e",
+  measurementId: "G-402327Y5EJ"
 };
 
 firebase.initializeApp(firebaseConfig);
