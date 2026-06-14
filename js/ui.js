@@ -678,26 +678,90 @@ function closeNegociosPanel() {
 }
 
 let negPanelPage = 1;
+let negFilterTipo = '';
+let negFilterCliente = '';
+let negFilterData = '';
 const NEG_PANEL_PER_PAGE = 15;
+
+function openNegociosPanel() {
+  const panel = document.getElementById('negocios-panel');
+  if (panel) panel.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  negPanelPage = 1;
+  negFilterTipo = '';
+  negFilterCliente = '';
+  negFilterData = '';
+  populateNegociosFilters();
+  renderNegociosPanel();
+}
+
+function populateNegociosFilters() {
+  const data = normalizeArrayData(negocios);
+  const tipos = [...new Set(data.map(n => n.tipo).filter(Boolean))].sort();
+  const clientes = [...new Set(data.map(n => n.cliente).filter(Boolean))].sort();
+  
+  const tipoSelect = document.getElementById('neg-filter-tipo');
+  const clienteSelect = document.getElementById('neg-filter-cliente');
+  const dataSelect = document.getElementById('neg-filter-data');
+  
+  if (tipoSelect) {
+    tipoSelect.innerHTML = '<option value="">Todos</option>' + 
+      tipos.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+  }
+  if (clienteSelect) {
+    clienteSelect.innerHTML = '<option value="">Todos</option>' + 
+      clientes.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  }
+  if (dataSelect) {
+    dataSelect.value = '';
+  }
+}
+
+function applyNegociosFilters() {
+  negFilterTipo = document.getElementById('neg-filter-tipo')?.value || '';
+  negFilterCliente = document.getElementById('neg-filter-cliente')?.value || '';
+  negFilterData = document.getElementById('neg-filter-data')?.value || '';
+  negPanelPage = 1;
+  renderNegociosPanel();
+}
+
+function getFilteredNegocios() {
+  const data = normalizeArrayData(negocios);
+  let filtered = data.sort((a,b) => new Date(b.date) - new Date(a.date));
+  
+  if (negFilterTipo) {
+    filtered = filtered.filter(n => n.tipo === negFilterTipo);
+  }
+  if (negFilterCliente) {
+    filtered = filtered.filter(n => n.cliente === negFilterCliente);
+  }
+  if (negFilterData) {
+    const days = parseInt(negFilterData);
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    filtered = filtered.filter(n => n.date && new Date(n.date) >= cutoff);
+  }
+  return filtered;
+}
 
 function renderNegociosPanel() {
   const container = document.getElementById('negocios-panel-body');
   if (!container) return;
 
-  const sorted = normalizeArrayData(negocios).sort((a,b) => new Date(b.date) - new Date(a.date));
+  const filtered = getFilteredNegocios();
 
-  if (!sorted.length) {
-    container.innerHTML = '<div class="empty-card" style="text-align:center;padding:40px;">Nenhum negócio registrado</div>';
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty-card" style="text-align:center;padding:40px;">Nenhum negócio encontrado com os filtros atuais</div>';
     return;
   }
 
-  const totalPages = Math.ceil(sorted.length / NEG_PANEL_PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / NEG_PANEL_PER_PAGE);
   if (negPanelPage < 1) negPanelPage = 1;
   if (negPanelPage > totalPages) negPanelPage = totalPages;
 
   const start = (negPanelPage - 1) * NEG_PANEL_PER_PAGE;
-  const end = Math.min(start + NEG_PANEL_PER_PAGE, sorted.length);
-  const pageItems = sorted.slice(start, end);
+  const end = Math.min(start + NEG_PANEL_PER_PAGE, filtered.length);
+  const pageItems = filtered.slice(start, end);
 
   let html = '<table class="negocios-panel-table">';
   html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor Unit.</th><th>Valor Total</th><th>Data</th></tr></thead>';
@@ -727,9 +791,14 @@ function renderNegociosPanel() {
       html += `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}">${i}</button>`;
     }
     html += `<button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''}>❯</button>`;
-    html += `<span class="page-info">${start + 1}–${end} de ${sorted.length}</span>`;
+    html += `<span class="page-info">${start + 1}–${end} de ${filtered.length}</span>`;
     html += '</div>';
   }
+
+  const periodLabel = negFilterData ? `Últimos ${negFilterData} dias` : 'Todos os períodos';
+  const tipoLabel = negFilterTipo ? ` | Tipo: ${negFilterTipo}` : '';
+  const clienteLabel = negFilterCliente ? ` | Cliente: ${negFilterCliente}` : '';
+  html += `<div class="negocios-result-info">${periodLabel}${tipoLabel}${clienteLabel} — ${filtered.length} Venda${filtered.length !== 1 ? 's' : ''}</div>`;
 
   container.innerHTML = html;
 }
