@@ -119,26 +119,7 @@
 
       var html = '';
       pageItems.forEach(function(seizure, idx) {
-        var imageUrl = seizure.imageUrl ? escapeHtml(seizure.imageUrl) : 'https://placehold.co/600x400/1a1a1a/555?text=Sem+Imagem';
-        var clickAction = seizure.imageUrl ? "onclick=\"openModal('" + imageUrl + "')\"" : '';
-        var dateText = new Date(seizure.date).toLocaleDateString('pt-BR') + ' às ' + new Date(seizure.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        html += '<div class="seizure-card reveal" style="transition-delay: ' + (idx * 0.03) + 's" ' + clickAction + '>';
-        html += '<div class="seizure-card-background ' + (seizure.imageUrl ? '' : 'seizure-card-background--empty') + '" style="background-image: url(\'' + imageUrl + '\');"></div>';
-        html += '<div class="seizure-card-overlay"></div>';
-        html += '<div class="seizure-card-content">';
-        html += '<div class="seizure-card-header"><span class="qru-badge">' + escapeHtml(seizure.description) + '</span></div>';
-        html += '<div class="seizure-meta">';
-        html += seizure.member ? makeMembersBadge(seizure.member) : '';
-        html += '</div>';
-        html += '<div class="seizure-footer">';
-        html += '<div class="seizure-footer-left">';
-        html += '<span class="badge"><span class="emoji-icon">📅</span>' + dateText + '</span>';
-        html += seizure.location ? '<span class="badge"><span class="emoji-icon">📍</span>' + escapeHtml(seizure.location) + '</span>' : '';
-        html += '</div>';
-        if (seizure.boImageUrl) {
-          html += '<span class="seizure-bo-link" onclick="event.stopPropagation();openModal(\'' + escapeHtml(seizure.boImageUrl) + '\')" title="Visualizar comprovante" aria-label="Visualizar comprovante"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;cursor:pointer;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="10" y1="10" x2="14" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/><line x1="10" y1="18" x2="12" y2="18"/></svg></span>';
-        }
-        html += '</div></div></div>';
+        html += renderSeizureCard(seizure, idx);
       });
 
       var filterInfo = '';
