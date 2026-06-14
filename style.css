@@ -2622,9 +2622,7 @@
     .admin-body [style*="#fff"] {
       color: #1a1a1a !important;
     }
-  }
 
-}
 #negocios { overflow: hidden; position: relative; }
 .negocios-card-locked {
   position: relative;
