@@ -664,6 +664,7 @@ function openNegociosPanel() {
   const panel = document.getElementById('negocios-panel');
   if (panel) panel.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+  negPanelPage = 1;
   renderNegociosPanel();
 }
 
@@ -677,6 +678,9 @@ function closeNegociosPanel() {
   }
 }
 
+let negPanelPage = 1;
+const NEG_PANEL_PER_PAGE = 15;
+
 function renderNegociosPanel() {
   const container = document.getElementById('negocios-panel-body');
   if (!container) return;
@@ -688,11 +692,19 @@ function renderNegociosPanel() {
     return;
   }
 
+  const totalPages = Math.ceil(sorted.length / NEG_PANEL_PER_PAGE);
+  if (negPanelPage < 1) negPanelPage = 1;
+  if (negPanelPage > totalPages) negPanelPage = totalPages;
+
+  const start = (negPanelPage - 1) * NEG_PANEL_PER_PAGE;
+  const end = Math.min(start + NEG_PANEL_PER_PAGE, sorted.length);
+  const pageItems = sorted.slice(start, end);
+
   let html = '<table class="negocios-panel-table">';
   html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor Unit.</th><th>Valor Total</th><th>Data</th></tr></thead>';
   html += '<tbody>';
 
-  sorted.forEach((n, idx) => {
+  pageItems.forEach((n, idx) => {
     const qtd = Number(n.quantidade || 0).toLocaleString('pt-BR');
     const valor = Number(n.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const total = Number(n.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -706,6 +718,22 @@ function renderNegociosPanel() {
       <td data-label="Data">${dateStr}</td>
     </tr>`;
   });
+
+  html += '</tbody></table>';
+
+  if (totalPages > 1) {
+    html += '<div class="negocios-pagination">';
+    html += `<button onclick="negPanelPage=${negPanelPage - 1};renderNegociosPanel()" ${negPanelPage <= 1 ? 'disabled' : ''}>❮</button>`;
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}">${i}</button>`;
+    }
+    html += `<button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''}>❯</button>`;
+    html += `<span class="page-info">${start + 1}–${end} de ${sorted.length}</span>`;
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
 
   html += '</tbody></table>';
   container.innerHTML = html;

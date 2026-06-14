@@ -2638,6 +2638,10 @@
   transition: filter 0.3s ease;
   pointer-events: none;
   user-select: none;
+  max-height: 420px;
+}
+.negocios-blurred-content table {
+  width: 100%;
 }
 .negocios-lock-overlay {
   position: absolute;
@@ -2656,6 +2660,47 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+.negocios-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 0 8px;
+  flex-wrap: wrap;
+}
+.negocios-pagination button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  min-width: 38px;
+}
+.negocios-pagination button:hover:not(:disabled) {
+  background: rgba(198,40,40,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.negocios-pagination button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.negocios-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.negocios-pagination .page-info {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 0 8px;
 }
 
 .negocios-panel {
