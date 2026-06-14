@@ -537,7 +537,7 @@ function renderMemberProfile(member) {
       const ms = getMembersList(s.member || s.memberName);
       return ms.includes(member.name);
     });
-    const avatarUrl = member.avatarUrl || 'https://placehold.co/80x80/1a1a1a/9146ff?text=👤';
+    const avatarUrl = member.avatarUrl || 'https://placehold.co/80x80/1a1a1a/19591d?text=👤';
     
     console.log(`📊 ${member.name} tem ${seizureCount} apreensões`);
     
@@ -579,7 +579,7 @@ function renderMemberProfile(member) {
         <div class="member-profile-hero">
           <div class="member-profile-avatar-wrapper">
             <div class="member-profile-avatar-inner">
-              <img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(member.name)}" class="member-profile-avatar" onerror="this.src='https://placehold.co/140x140/1a1a1a/9146ff?text=👤'">
+              <img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(member.name)}" class="member-profile-avatar" onerror="this.src='https://placehold.co/140x140/1a1a1a/19591d?text=👤'">
               <div class="member-avatar-overlay">
                 <div class="member-avatar-title">${escapeHtml(member.name)}</div>
                 <div class="member-avatar-badges">
