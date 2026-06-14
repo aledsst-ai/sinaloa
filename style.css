@@ -2019,11 +2019,13 @@
       transition: var(--transition);
     }
     .pwd-btn-confirm {
-      background: #ffffff;
-      color: #0a0a0a;
+      background: #c62828;
+      color: #ffffff;
+      border: 1px solid #c62828;
     }
     .pwd-btn-confirm:hover {
-      background: #eaeaea;
+      background: #b71c1c;
+      border-color: #b71c1c;
       transform: translateY(-1px);
     }
     .pwd-btn-cancel {
