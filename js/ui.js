@@ -602,7 +602,7 @@ function renderMemberProfile(member) {
       </div>
 
       <div class="seizures-carousel-wrapper">
-        <div class="seizures-carousel-title">📸 Últimas 10 apreensões</div>
+        <div class="seizures-carousel-title">📸 Últimas 10 ações</div>
         <div class="seizures-carousel-container">
           ${seizuresHtml}
         </div>
