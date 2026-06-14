@@ -284,30 +284,26 @@ function renderVehicles() {
 const NEGOCIOS_PAGE_HOME = 10;
 
 function renderNegocios() {
-  const container = document.getElementById('negocios-content');
-  if (!container) return;
+  const blurredRows = document.getElementById('negocios-blurred-rows');
+  const lockedCard = document.getElementById('negocios-locked-card');
+  const panelLink = document.querySelector('#negocios a[href="negocios.html"]');
   
   const sorted = normalizeArrayData(negocios).sort((a,b) => new Date(b.date) - new Date(a.date));
   
   if (!sorted.length) {
-    container.innerHTML = '<div class="empty-card">Nenhum negócio registrado</div>';
+    if (blurredRows) blurredRows.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum negócio registrado</td></tr>';
     return;
   }
   
   const pageItems = sorted.slice(0, NEGOCIOS_PAGE_HOME);
   
-  let html = '<div class="negocios-card">';
-  html += '<table class="negocios-table">';
-  html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor</th><th>Valor Total</th></tr></thead>';
-  html += '<tbody>';
-  
+  let html = '';
   pageItems.forEach((item, idx) => {
     const tipo = escapeHtml(item.tipo || '-');
     const qtd = Number(item.quantidade || 0).toLocaleString('pt-BR');
     const cliente = escapeHtml(item.cliente || '-');
     const valor = Number(item.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const valorTotal = Number(item.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    const dateStr = item.date ? new Date(item.date).toLocaleDateString('pt-BR') : '';
     
     html += `<tr class="negocios-row ${idx % 2 === 0 ? 'negocios-row--even' : ''}">
       <td data-label="Tipo">${tipo}</td>
@@ -318,14 +314,9 @@ function renderNegocios() {
     </tr>`;
   });
   
-  html += '</tbody></table>';
+  if (blurredRows) blurredRows.innerHTML = html;
+  if (lockedCard) lockedCard.style.display = '';
   
-  if (sorted.length > NEGOCIOS_PAGE_HOME) {
-    html += '<div style="text-align:center;padding:16px 0 8px;"><a href="negocios.html" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;">VER TODOS OS NEGÓCIOS →</a></div>';
-  }
-  
-  html += '</div>';
-  container.innerHTML = html;
   observeRevealElements();
 }
 
@@ -623,3 +614,111 @@ function openImageModal(imageUrl) {
 function initRevealOnScroll() {
   observeRevealElements();
 }
+
+let negAuthType = null;
+
+function openNegociosAuth() {
+  const modal = document.getElementById('negociosAuthModal');
+  if (modal) modal.classList.add('show');
+  document.getElementById('negAuthInput').value = '';
+  document.getElementById('negAuthError').style.display = 'none';
+  setTimeout(() => document.getElementById('negAuthInput').focus(), 100);
+}
+
+function closeNegociosAuth() {
+  const modal = document.getElementById('negociosAuthModal');
+  if (modal) modal.classList.remove('show');
+  negAuthType = null;
+}
+
+function submitNegociosAuth() {
+  const pwd = document.getElementById('negAuthInput').value;
+  if (!pwd) return;
+  const btn = document.querySelector('#negociosAuthModal .pwd-btn-confirm');
+  btn.disabled = true;
+  btn.textContent = 'VERIFICANDO...';
+
+  const tryAdmin = () => firebase.auth().signInWithEmailAndPassword('admin@sinaloa.app', pwd)
+    .then(() => { negAuthType = 'admin'; });
+
+  const tryMembers = () => firebase.auth().signInWithEmailAndPassword('membros@sinaloa.app', pwd)
+    .then(() => { negAuthType = 'members'; });
+
+  tryAdmin()
+    .catch(() => tryMembers())
+    .then(() => {
+      closeNegociosAuth();
+      openNegociosPanel();
+    })
+    .catch(error => {
+      document.getElementById('negAuthError').textContent = 'Senha incorreta para Admin e Membros';
+      document.getElementById('negAuthError').style.display = 'block';
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = 'LIBERAR';
+    });
+}
+
+function openNegociosPanel() {
+  const panel = document.getElementById('negocios-panel');
+  if (panel) panel.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  renderNegociosPanel();
+}
+
+function closeNegociosPanel() {
+  const panel = document.getElementById('negocios-panel');
+  if (panel) panel.classList.add('hidden');
+  document.body.style.overflow = '';
+  if (negAuthType) {
+    firebase.auth().signOut();
+    negAuthType = null;
+  }
+}
+
+function renderNegociosPanel() {
+  const container = document.getElementById('negocios-panel-body');
+  if (!container) return;
+
+  const sorted = normalizeArrayData(negocios).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  if (!sorted.length) {
+    container.innerHTML = '<div class="empty-card" style="text-align:center;padding:40px;">Nenhum negócio registrado</div>';
+    return;
+  }
+
+  let html = '<table class="negocios-panel-table">';
+  html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor Unit.</th><th>Valor Total</th><th>Data</th></tr></thead>';
+  html += '<tbody>';
+
+  sorted.forEach((n, idx) => {
+    const qtd = Number(n.quantidade || 0).toLocaleString('pt-BR');
+    const valor = Number(n.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const total = Number(n.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const dateStr = n.date ? new Date(n.date).toLocaleDateString('pt-BR') : '';
+    html += `<tr>
+      <td data-label="Tipo">${escapeHtml(n.tipo || '-')}</td>
+      <td data-label="Quantidade">${qtd}</td>
+      <td data-label="Cliente">${escapeHtml(n.cliente || '-')}</td>
+      <td data-label="Valor Unit.">${valor}</td>
+      <td data-label="Valor Total">${total}</td>
+      <td data-label="Data">${dateStr}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const authModal = document.getElementById('negociosAuthModal');
+    const panel = document.getElementById('negocios-panel');
+    if (authModal && authModal.classList.contains('show')) {
+      closeNegociosAuth();
+    } else if (panel && !panel.classList.contains('hidden')) {
+      closeNegociosPanel();
+    }
+  }
+});
