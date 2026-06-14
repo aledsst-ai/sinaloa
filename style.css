@@ -2623,7 +2623,7 @@
       color: #1a1a1a !important;
     }
 
-#negocios { overflow: hidden; position: relative; }
+#negocios { position: relative; }
 .negocios-card-locked {
   position: relative;
   border-radius: 12px;
@@ -2634,7 +2634,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  contain: paint;
+  min-height: 220px;
 }
 .negocios-blurred-content {
   filter: blur(8px);

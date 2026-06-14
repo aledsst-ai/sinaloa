@@ -401,11 +401,10 @@ function updateStats() {
 
   const intro = document.getElementById('intro');
   if (intro && !intro.classList.contains('hidden')) {
-    const onTransitionEnd = () => {
-      intro.removeEventListener('transitionend', onTransitionEnd);
-      setTimeout(run, 200);
-    };
-    intro.addEventListener('transitionend', onTransitionEnd);
+    let done = false;
+    const safe = () => { if (!done) { done = true; setTimeout(run, 200); } };
+    intro.addEventListener('transitionend', safe, { once: true });
+    setTimeout(safe, 4000);
   } else {
     setTimeout(run, 300);
   }
