@@ -35,6 +35,13 @@
   </script>
 </head>
 <body>
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <filter id="grain-noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+</svg>
+<div class="grain-overlay"></div>
   <nav>
     <div class="nav-inner">
       <div style="display:flex;align-items:center;gap:16px;">
