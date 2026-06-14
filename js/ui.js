@@ -439,10 +439,11 @@ function animateStatValue(id, value) {
 }
 
 function renderAll() {
-  renderHierarchy();
-  renderLiveMembers();
-  renderVehicles();
-  renderSeizures();
+  try { renderHierarchy(); } catch(e) { console.error('renderHierarchy error:', e); }
+  try { renderLiveMembers(); } catch(e) { console.error('renderLiveMembers error:', e); }
+  try { renderVehicles(); } catch(e) { console.error('renderVehicles error:', e); }
+  try { renderSeizures(); } catch(e) { console.error('renderSeizures error:', e); }
+  try { renderNegocios(); } catch(e) { console.error('renderNegocios error:', e); }
   updateStats();
 }
 

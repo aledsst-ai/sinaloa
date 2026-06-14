@@ -154,11 +154,12 @@ function loadData() {
         }
         firebaseInitialSyncCompleted = true;
         console.log('✅ Firebase initial sync completed');
-        renderHierarchy();
-        renderLiveMembers();
-        renderVehicles();
-        renderSeizures();
-        renderGallery();
+        try { renderHierarchy(); } catch(e) { console.error('renderHierarchy error:', e); }
+        try { renderLiveMembers(); } catch(e) { console.error('renderLiveMembers error:', e); }
+        try { renderVehicles(); } catch(e) { console.error('renderVehicles error:', e); }
+        try { renderSeizures(); } catch(e) { console.error('renderSeizures error:', e); }
+        try { renderGallery(); } catch(e) { console.error('renderGallery error:', e); }
+        try { renderNegocios(); } catch(e) { console.error('renderNegocios error:', e); }
         updateStats();
         if (typeof updateAllStreamStatus === 'function') {
           setTimeout(() => updateAllStreamStatus(true), 50);
