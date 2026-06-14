@@ -314,6 +314,9 @@
   </div>
 </div>
 
+<script>
+(function(){var c=document.createElement('canvas');c.width=256;c.height=256;var x=c.getContext('2d');var d=x.createImageData(256,256);var a=d.data;for(var i=0;i<a.length;i+=4){var v=Math.random()*255|0;a[i]=v;a[i+1]=v;a[i+2]=v;a[i+3]=255}x.putImageData(d,0,0);var el=document.querySelector('.grain-overlay');if(el)el.style.backgroundImage='url('+c.toDataURL('image/png')+')'})();
+</script>
 </body>
 </html>
 
