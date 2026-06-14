@@ -605,8 +605,8 @@
       position: relative;
       overflow: hidden;
       color: #19591d;
-      background: rgba(145, 70, 255, 0.15);
-      border-color: rgba(145, 70, 255, 0.25);
+      background: rgba(25, 89, 29, 0.15);
+      border-color: rgba(25, 89, 29, 0.25);
     }
     .member-profile-twitch::before {
       content: '';
@@ -620,7 +620,7 @@
       animation: metallic-sweep 2.8s ease-in-out infinite;
     }
     .member-profile-twitch:hover {
-      background: rgba(145, 70, 255, 0.25);
+      background: rgba(25, 89, 29, 0.25);
     }
     .profile-stat:hover {
       background: var(--bg-hover);
@@ -672,13 +672,13 @@
       height: 20px;
       color: #19591d;
       border-radius: 6px;
-      background: rgba(145, 70, 255, 0.08);
+      background: rgba(25, 89, 29, 0.08);
       transition: all 0.25s ease;
     }
     .twitch-link:hover {
-      background: rgba(145, 70, 255, 0.25);
+      background: rgba(25, 89, 29, 0.25);
       transform: scale(1.15);
-      box-shadow: 0 0 12px rgba(145, 70, 255, 0.3);
+      box-shadow: 0 0 12px rgba(25, 89, 29, 0.3);
     }
     .twitch-link svg {
       width: 12px;
@@ -859,8 +859,8 @@
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      background: rgba(145, 70, 255, 0.15);
-      border: 1.5px solid rgba(145, 70, 255, 0.3);
+      background: rgba(25, 89, 29, 0.15);
+      border: 1.5px solid rgba(25, 89, 29, 0.3);
       border-radius: 8px;
       text-decoration: none;
       color: #ffffff;
@@ -870,8 +870,8 @@
       margin: 10px 0;
     }
     .member-twitch-link:hover {
-      background: rgba(145, 70, 255, 0.25);
-      border-color: rgba(145, 70, 255, 0.5);
+      background: rgba(25, 89, 29, 0.25);
+      border-color: rgba(25, 89, 29, 0.5);
       transform: translateY(-2px);
     }
     .member-twitch-link svg {
@@ -1128,21 +1128,21 @@
       background: rgba(198, 40, 40, 0.9);
       border-color: rgba(198, 40, 40, 0.6);
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(145,70,255,0.4);
+      box-shadow: 0 0 12px rgba(25,89,29,0.4);
     }
     .member-card:hover::after {
       opacity: 1;
     }
     .member-card.twitch-live-card {
-      background: linear-gradient(135deg, rgba(145, 70, 255, 0.08), rgba(145, 70, 255, 0.03));
-      border-color: rgba(145, 70, 255, 0.2);
-      box-shadow: 0 2px 12px rgba(145, 70, 255, 0.1);
+      background: linear-gradient(135deg, rgba(25, 89, 29, 0.08), rgba(25, 89, 29, 0.03));
+      border-color: rgba(25, 89, 29, 0.2);
+      box-shadow: 0 2px 12px rgba(25, 89, 29, 0.1);
       cursor: pointer;
     }
     .member-card.twitch-live-card:hover {
-      background: linear-gradient(135deg, rgba(145, 70, 255, 0.14), rgba(145, 70, 255, 0.06));
-      border-color: rgba(145, 70, 255, 0.35);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 12px rgba(145, 70, 255, 0.08);
+      background: linear-gradient(135deg, rgba(25, 89, 29, 0.14), rgba(25, 89, 29, 0.06));
+      border-color: rgba(25, 89, 29, 0.35);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 12px rgba(25, 89, 29, 0.08);
     }
     .member-card.twitch-live-card .member-name,
     .member-card.twitch-live-card .member-police-rank,
@@ -1152,8 +1152,8 @@
       color: #1a1a1a;
     }
     .member-card.twitch-live-card .member-avatar {
-      border-color: rgba(145, 70, 255, 0.5);
-      box-shadow: 0 0 10px rgba(145, 70, 255, 0.2);
+      border-color: rgba(25, 89, 29, 0.5);
+      box-shadow: 0 0 10px rgba(25, 89, 29, 0.2);
     }
     
     .member-avatar {
@@ -1245,9 +1245,9 @@
     .twitch-online {
       position: relative;
       overflow: hidden;
-      background: rgba(145,70,255,0.2);
+      background: rgba(25,89,29,0.2);
       color: #ffffff;
-      border: 1px solid rgba(145,70,255,0.25);
+      border: 1px solid rgba(25,89,29,0.25);
     }
     .twitch-online::before {
       content: '';
