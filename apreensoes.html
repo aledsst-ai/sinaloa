@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sinaloa - Operações</title>
-  <meta name="description" content="Registros de operações da Sinaloa. Filtre por membro, período e visualize detalhes."/>
-  <meta property="og:title" content="Sinaloa — Operações"/>
-  <meta property="og:description" content="Registros de operações da Sinaloa."/>
+  <title>Sinaloa - Ações</title>
+  <meta name="description" content="Registros de ações da Sinaloa. Filtre por membro, período e visualize detalhes."/>
+  <meta property="og:title" content="Sinaloa — Ações"/>
+  <meta property="og:description" content="Registros de ações da Sinaloa."/>
   <meta property="og:image" content="https://sinaloa.aledsst.workers.dev/assets/img/logo.png"/>
   <meta property="og:type" content="website"/>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
@@ -126,7 +126,7 @@
       if (selectedMember && selectedDays) filterInfo = ' (' + escapeHtml(selectedMember) + ', últimos ' + selectedDays + ' dias)';
       else if (selectedMember) filterInfo = ' (' + escapeHtml(selectedMember) + ')';
       else if (selectedDays) filterInfo = ' (últimos ' + selectedDays + ' dias)';
-      html += '<div style="grid-column:1/-1;text-align:center;padding:5px 0;font-family:inherit;font-size:14px;color:var(--text-muted);">Total de operações' + filterInfo + ': <strong>' + filteredSeizures.length + '</strong></div>';
+      html += '<div style="grid-column:1/-1;text-align:center;padding:5px 0;font-family:inherit;font-size:14px;color:var(--text-muted);">Total de ações' + filterInfo + ': <strong>' + filteredSeizures.length + '</strong></div>';
 
       if (totalPages > 1) {
         html += '<div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:8px;padding:12px 0;flex-wrap:wrap;font-family:inherit;font-weight:700;font-size:12px;">';
