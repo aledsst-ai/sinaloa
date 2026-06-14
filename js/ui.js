@@ -5,7 +5,7 @@
   const statusClass = isActive ? 'status-ativo' : 'status-inativo';
   const statusText = isActive ? '' : 'Inativo';
   const seizureCount = getMemberSeizureCount(memberName);
-  const seizureText = seizureCount === 1 ? 'OPERAÇÃO' : 'OPERAÇÕES';
+  const seizureText = seizureCount === 1 ? 'AÇÃO' : 'AÇÕES';
   const streamInfo = getStreamBadgeInfo(member);
   const registeredAt = parseStoredDate(member.createdAt);
   const registeredText = registeredAt
@@ -345,7 +345,7 @@ function renderSeizures() {
     const sorted = [...approved].sort((a,b) => (b.approvedAt || new Date(b.date).getTime()) - (a.approvedAt || new Date(a.date).getTime())).slice(0, 9);
     
     if (!sorted.length) {
-      container.innerHTML = '<div class="empty-card">Nenhuma operação registrada</div>';
+      container.innerHTML = '<div class="empty-card">Nenhuma ação registrada</div>';
       return;
     }
     
@@ -370,7 +370,7 @@ function renderSeizures() {
       try {
         html += renderSeizureCard(item, idx);
       } catch (itemError) {
-        console.error('❌ Erro ao renderizar operação:', itemError, item);
+        console.error('❌ Erro ao renderizar ação:', itemError, item);
       }
     });
     
@@ -543,7 +543,7 @@ function renderMemberProfile(member) {
     
     let seizuresHtml = '';
     if (memberSeizures.length === 0) {
-      seizuresHtml = '<div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Nenhuma operação cadastrada</div>';
+      seizuresHtml = '<div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Nenhuma ação cadastrada</div>';
     } else {
       const sortedMemberSeizures = [...memberSeizures]
         .sort((a, b) => (b.approvedAt || new Date(b.date).getTime()) - (a.approvedAt || new Date(a.date).getTime()))
@@ -552,7 +552,7 @@ function renderMemberProfile(member) {
         try {
           const seizureDate = new Date(seizure.date);
           const dateStr = seizureDate.toLocaleDateString('pt-BR');
-          const description = seizure.description || seizure.title || 'Operação sem descrição';
+          const description = seizure.description || seizure.title || 'Ação sem descrição';
           const imageUrl = seizure.imageUrl || seizure.boImageUrl || '';
           const thumbnail = imageUrl || 'https://placehold.co/120x120/1a1a1a/ffffff?text=%3F';
           return `
@@ -565,7 +565,7 @@ function renderMemberProfile(member) {
             </div>
           `;
         } catch (e) {
-          console.error('Erro ao renderizar operação:', e, seizure);
+          console.error('Erro ao renderizar ação:', e, seizure);
           return '';
         }
       }).join('');
@@ -606,7 +606,7 @@ function renderMemberProfile(member) {
         <div class="seizures-carousel-container">
           ${seizuresHtml}
         </div>
-        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;">VER MAIS OPERAÇÕES →</a></div>
+        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;">VER MAIS AÇÕES →</a></div>
       </div>
     `;
 

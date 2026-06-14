@@ -388,13 +388,13 @@ function renderAdminSeizures() {
   }).join('');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR OPERAÇÃO</h3>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR AÇÃO</h3>
       <div class="form-group"><label>TIPO *</label><select id="new-desc" required><option value="">-- Selecione --</option><option value="Roubo de carga">Roubo de carga</option><option value="Assalto a banco">Assalto a banco</option><option value="Tráfico de armas">Tráfico de armas</option><option value="Sequestro">Sequestro</option><option value="Homicídio contratado">Homicídio contratado</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Invasão">Invasão</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Venda de drogas">Venda de drogas</option><option value="Falsificação">Falsificação</option><option value="Lavagem de dinheiro">Lavagem de dinheiro</option><option value="Extorsão">Extorsão</option><option value="Resgate">Resgate</option></select><input id="new-desc-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="new-simg" placeholder="https://..." required></div>
       <div class="form-group"><label>BO URL *</label><input id="new-bo" placeholder="https://..." required></div>
-      <button class="btn btn-primary" onclick="addSeizure()">REGISTRAR OPERAÇÃO</button>
+      <button class="btn btn-primary" onclick="addSeizure()">REGISTRAR AÇÃO</button>
     </div>
     <div id="seizures-list"></div>
   `;
@@ -403,7 +403,7 @@ function renderAdminSeizures() {
 
 function renderSeizuresList() {
   const container = document.getElementById('seizures-list');
-  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma operação</div>'; return; }
+  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma ação</div>'; return; }
   const sorted = [...seizures].reverse();
   const totalPages = Math.ceil(sorted.length / ADMIN_SEIZURES_PER_PAGE);
   if (adminSeizurePage > totalPages) adminSeizurePage = totalPages;
@@ -651,13 +651,13 @@ function renderMembersSeizures() {
   }).join('');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR OPERAÇÃO</h3>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR AÇÃO</h3>
       <div class="form-group"><label>TIPO *</label><select id="m-new-desc" required><option value="">-- Selecione --</option><option value="Roubo de carga">Roubo de carga</option><option value="Assalto a banco">Assalto a banco</option><option value="Tráfico de armas">Tráfico de armas</option><option value="Sequestro">Sequestro</option><option value="Homicídio contratado">Homicídio contratado</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Invasão">Invasão</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Venda de drogas">Venda de drogas</option><option value="Falsificação">Falsificação</option><option value="Lavagem de dinheiro">Lavagem de dinheiro</option><option value="Extorsão">Extorsão</option><option value="Resgate">Resgate</option></select><input id="m-new-desc-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="m-new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="m-new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="m-new-simg" placeholder="https://..." required></div>
       <div class="form-group"><label>BO URL *</label><input id="m-new-bo" placeholder="https://..." required></div>
-      <button class="btn btn-primary" onclick="addSeizureMembers()">REGISTRAR OPERAÇÃO</button>
+      <button class="btn btn-primary" onclick="addSeizureMembers()">REGISTRAR AÇÃO</button>
     </div>
     <div id="seizures-list-members"></div>
   `;
@@ -666,7 +666,7 @@ function renderMembersSeizures() {
 
 function renderSeizuresListMembers() {
   const container = document.getElementById('seizures-list-members');
-  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma operação</div>'; return; }
+  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma ação</div>'; return; }
   const sorted = [...seizures].reverse();
   const totalPages = Math.ceil(sorted.length / ADMIN_SEIZURES_PER_PAGE);
   if (membersSeizurePage > totalPages) membersSeizurePage = totalPages;
@@ -856,7 +856,7 @@ function addSeizure() {
 }
 
 function deleteSeizure(id) {
-  if (!confirm("Remover esta operação?")) return;
+  if (!confirm("Remover esta ação?")) return;
   seizures = seizures.filter(s => s.id !== id);
   saveData();
   renderAll();

@@ -186,7 +186,7 @@ function renderSeizureCard(item, idx) {
       <div class="seizure-card-background ${item.imageUrl ? '' : 'seizure-card-background--empty'}" style="${backgroundStyle}"></div>
       <div class="seizure-card-overlay"></div>
       <div class="seizure-card-content">
-        <div class="seizure-card-header">    <span class="qru-badge">${escapeHtml(item.description || 'Operação')}</span></div>
+        <div class="seizure-card-header">    <span class="qru-badge">${escapeHtml(item.description || 'Ação')}</span></div>
         <div class="seizure-meta">
           ${item.member ? makeMembersBadge(item.member) : ''}
         </div>
