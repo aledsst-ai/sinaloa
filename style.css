@@ -2625,6 +2625,7 @@
   }
 
 }
+#negocios { overflow: hidden; position: relative; }
 .negocios-card-locked {
   position: relative;
   border-radius: 12px;
@@ -2635,6 +2636,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  contain: paint;
 }
 .negocios-blurred-content {
   filter: blur(8px);
