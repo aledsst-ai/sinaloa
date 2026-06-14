@@ -134,10 +134,10 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="admin-header"><h2>PAINEL ADMINISTRATIVO</h2><button class="btn btn-secondary" onclick="closeAdminPanel()">FECHAR</button></div>
         <div class="admin-tabs">
           <div style="display:flex;gap:2px;">
-            <div class="admin-tab active">APREENSÕES</div>
+            <div class="admin-tab active">OPERAÇÕES</div>
             <div class="admin-tab">MEMBROS</div>
             <div class="admin-tab">GALERIA</div>
-            <div class="admin-tab">VIATURAS</div>
+            <div class="admin-tab">VEÍCULOS</div>
           </div>
           <div style="display:flex;gap:2px;margin-left:auto;">
             <div class="admin-tab">ORDEM</div>
@@ -159,7 +159,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="admin-tabs">
           <div class="admin-tab active">APREENSÕES</div>
           <div class="admin-tab">GALERIA</div>
-          <div class="admin-tab">VIATURAS</div>
+          <div class="admin-tab">VEÍCULOS</div>
           <div class="admin-tab">MEMBROS</div>
         </div>
         <div class="admin-body" id="members-body"></div>

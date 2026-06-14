@@ -1,11 +1,11 @@
 ﻿function createHierarchyMemberCard(member, index) {
   const memberName = (member.name || 'Sem nome').trim();
-  const memberRank = (member.policeRank || 'Soldado').trim();
+  const memberRank = (member.policeRank || 'Membro').trim();
   const isActive = member.status === 'ativo';
   const statusClass = isActive ? 'status-ativo' : 'status-inativo';
   const statusText = isActive ? '' : 'Inativo';
   const seizureCount = getMemberSeizureCount(memberName);
-  const seizureText = seizureCount === 1 ? 'APREENSÃO' : 'APREENSÕES';
+  const seizureText = seizureCount === 1 ? 'OPERAÇÃO' : 'OPERAÇÕES';
   const streamInfo = getStreamBadgeInfo(member);
   const registeredAt = parseStoredDate(member.createdAt);
   const registeredText = registeredAt
@@ -231,7 +231,7 @@ function renderLiveMemberCard(m, idx) {
         <div class="live-card-info">
           <div class="live-card-name">${escapeHtml(m.name)}</div>
           <div class="live-card-rank">
-            ${escapeHtml(m.policeRank || 'Soldado')}
+              ${escapeHtml(m.policeRank || 'Membro')}
             ${m.rank ? `· ${escapeHtml(m.rank)}` : ''}
             ${m.level ? `<span class="live-card-level">Nv.${m.level}</span>` : ''}
           </div>
@@ -272,7 +272,7 @@ function renderVehicles() {
   const sorted = [...vehicles].sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
   const container = document.getElementById('vehicles-content');
   if (!sorted.length) {
-    container.innerHTML = '<div class="empty-card">Nenhuma viatura cadastrada</div>';
+    container.innerHTML = '<div class="empty-card">Nenhum veículo cadastrado</div>';
     return;
   }
   
@@ -364,7 +364,7 @@ function renderSeizures() {
     const sorted = [...approved].sort((a,b) => (b.approvedAt || new Date(b.date).getTime()) - (a.approvedAt || new Date(a.date).getTime())).slice(0, 9);
     
     if (!sorted.length) {
-      container.innerHTML = '<div class="empty-card">Nenhuma apreensão registrada</div>';
+      container.innerHTML = '<div class="empty-card">Nenhuma operação registrada</div>';
       return;
     }
     
@@ -398,7 +398,7 @@ function renderSeizures() {
             <div class="seizure-card-background ${item.imageUrl ? '' : 'seizure-card-background--empty'}" style="${backgroundStyle}"></div>
             <div class="seizure-card-overlay"></div>
             <div class="seizure-card-content">
-              <div class="seizure-card-header"><span class="qru-badge">${escapeHtml(item.description || 'Apreensão')}</span></div>
+              <div class="seizure-card-header">    <span class="qru-badge">${escapeHtml(item.description || 'Operação')}</span></div>
               <div class="seizure-meta">
                 ${item.member ? makeMembersBadge(item.member) : ''}
               </div>
@@ -407,13 +407,13 @@ function renderSeizures() {
                   <span class="badge"><span class="emoji-icon">📅</span>${dateText}</span>
                   ${item.location ? `<span class="badge"><span class="emoji-icon">📍</span>${escapeHtml(item.location)}</span>` : ''}
                 </div>
-                ${item.boImageUrl ? `<span class="seizure-bo-link" onclick="event.stopPropagation();openModal('${escapeHtml(item.boImageUrl)}')" title="Visualizar boletim" aria-label="Visualizar boletim"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;cursor:pointer;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="10" y1="10" x2="14" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/><line x1="10" y1="18" x2="12" y2="18"/></svg></span>` : ''}
+                  ${item.boImageUrl ? `<span class="seizure-bo-link" onclick="event.stopPropagation();openModal('${escapeHtml(item.boImageUrl)}')" title="Visualizar comprovante" aria-label="Visualizar comprovante"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;cursor:pointer;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="10" y1="10" x2="14" y2="10"/><line x1="10" y1="14" x2="14" y2="14"/><line x1="10" y1="18" x2="12" y2="18"/></svg></span>` : ''}
               </div>
             </div>
           </div>
         `;
       } catch (itemError) {
-        console.error('❌ Erro ao renderizar item de apreensão:', itemError, item);
+        console.error('❌ Erro ao renderizar operação:', itemError, item);
       }
     });
     
@@ -586,7 +586,7 @@ function renderMemberProfile(member) {
     
     let seizuresHtml = '';
     if (memberSeizures.length === 0) {
-      seizuresHtml = '<div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Nenhuma apreensão cadastrada</div>';
+      seizuresHtml = '<div style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem;">Nenhuma operação cadastrada</div>';
     } else {
       const sortedMemberSeizures = [...memberSeizures]
         .sort((a, b) => (b.approvedAt || new Date(b.date).getTime()) - (a.approvedAt || new Date(a.date).getTime()))
@@ -595,7 +595,7 @@ function renderMemberProfile(member) {
         try {
           const seizureDate = new Date(seizure.date);
           const dateStr = seizureDate.toLocaleDateString('pt-BR');
-          const description = seizure.description || seizure.title || 'Apreensão sem descrição';
+          const description = seizure.description || seizure.title || 'Operação sem descrição';
           const imageUrl = seizure.imageUrl || seizure.boImageUrl || '';
           const thumbnail = imageUrl || 'https://placehold.co/120x120/1a1a1a/ffffff?text=%3F';
           return `
@@ -608,7 +608,7 @@ function renderMemberProfile(member) {
             </div>
           `;
         } catch (e) {
-          console.error('Erro ao renderizar apreensão:', e, seizure);
+          console.error('Erro ao renderizar operação:', e, seizure);
           return '';
         }
       }).join('');
@@ -626,7 +626,7 @@ function renderMemberProfile(member) {
               <div class="member-avatar-overlay">
                 <div class="member-avatar-title">${escapeHtml(member.name)}</div>
                 <div class="member-avatar-badges">
-                  <span class="member-profile-badge">${escapeHtml(member.policeRank || 'Soldado')}</span>
+                  <span class="member-profile-badge">${escapeHtml(member.policeRank || 'Membro')}</span>
                   <span class="badge-sep">-</span>
                   <span class="member-profile-badge">${escapeHtml(member.rank || 'Membro')}</span>
                   <span class="badge-sep">-</span>
@@ -649,7 +649,7 @@ function renderMemberProfile(member) {
         <div class="seizures-carousel-container">
           ${seizuresHtml}
         </div>
-        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:#ffffff;text-decoration:none;font-weight:600;">VER MAIS APREENSÕES →</a></div>
+        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:#ffffff;text-decoration:none;font-weight:600;">VER MAIS OPERAÇÕES →</a></div>
       </div>
     `;
 

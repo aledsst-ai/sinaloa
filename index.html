@@ -4,17 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Sinaloa — Painel de Operações</title>
-  <meta name="description" content="Sinaloa - Dashboard operacional com membros ao vivo, hierarquia, galeria, viaturas e apreensões."/>
+  <meta name="description" content="Sinaloa - Dashboard com membros ao vivo, hierarquia, galeria, veículos e operações."/>
   <meta property="og:title" content="Sinaloa — Painel de Operações"/>
-  <meta property="og:description" content="Dashboard operacional da Sinaloa."/>
-  <meta property="og:image" content="https://i.ibb.co/WW6RJQ3s/logosinaloa.png"/>
+  <meta property="og:description" content="Painel de operações da Sinaloa."/>
+  <meta property="og:image" content="https://sinaloa.aledsst.workers.dev/assets/img/logo.png"/>
   <meta property="og:url" content="https://sinaloa.aledsst.workers.dev"/>
   <meta property="og:type" content="website"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/WW6RJQ3s/logosinaloa.png">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="stylesheet" href="style.css">
   <script>
     try {
@@ -40,7 +40,7 @@
 <body>
 
 <div id="intro">
-  <img src="https://i.ibb.co/WW6RJQ3s/logosinaloa.png" alt="Logo Sinaloa">
+  <img src="assets/img/logo.png" alt="Logo Sinaloa">
   <div class="brand">LOADING...</div>
   <div class="bar"><div class="bar-fill"></div></div>
 </div>
@@ -49,7 +49,7 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-brand" href="#home">
-      <img src="https://i.ibb.co/WW6RJQ3s/logosinaloa.png" alt="Logo Sinaloa">
+      <img src="assets/img/logo.png" alt="Logo Sinaloa">
     </a>
     <button class="nav-toggle" id="navToggle" onclick="toggleNavMenu()" aria-label="Abrir menu de navegação" aria-expanded="false">
       <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round">
@@ -64,8 +64,8 @@
       <li><a href="#live">Ao vivo</a></li>
       <li><a href="#hierarchy">Hierarquia</a></li>
       <li><a href="#gallery">Galeria</a></li>
-      <li><a href="#vehicles">Viaturas</a></li>
-      <li><a href="#seizures">Apreensões</a></li>
+      <li><a href="#vehicles">Veículos</a></li>
+      <li><a href="#seizures">Operações</a></li>
     </ul>
     <div class="nav-actions">
       <div class="admin-menu">
@@ -96,7 +96,7 @@
   </div>
   <div class="stats">
     <div class="stats-group">
-      <div class="stats-group-title">UNIDADE</div>
+      <div class="stats-group-title">FACÇÃO</div>
       <div class="stats-group-cards">
         <div class="stat stat-live" onclick="document.getElementById('live').scrollIntoView({ behavior: 'smooth' })">
           <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0;color:var(--twitch-light);"><path d="M11.571 4.714h1.715v5.143h-1.715V4.714zm4.715 0H18v5.143h-1.714V4.714zm0 2.286l1.715 1.715-1.715 1.715V6.999zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0H6zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714v9.429z"/></svg>
@@ -115,7 +115,7 @@
     </div>
     <div class="stats-divider"></div>
     <div class="stats-group">
-      <div class="stats-group-title">APREENSÕES</div>
+      <div class="stats-group-title">OPERAÇÕES</div>
       <div class="stats-group-cards">
         <div class="stat" onclick="document.getElementById('seizures').scrollIntoView({ behavior: 'smooth' })">
           <div>
@@ -143,9 +143,9 @@
 <section id="about">
   <div class="container">
     <div class="about-grid">
-      <div class="reveal-left"><img class="logo-img" src="https://i.ibb.co/WW6RJQ3s/logosinaloa.png" alt="Logo Sinaloa"></div>
+      <div class="reveal-left"><img class="logo-img" src="assets/img/logo.png" alt="Logo Sinaloa"></div>
       <div class="reveal-right">
-        <p class="about-text">Bem-vindo ao painel de operações Sinaloa. Acompanhe em tempo real as atividades, membros, apreensões e muito mais.</p>
+        <p class="about-text">Sinaloa é uma organização que opera nas sombras. Acompanhe em tempo real as atividades, membros e operações realizadas.</p>
       </div>
     </div>
   </div>
@@ -187,7 +187,7 @@
           </div>
           <div>
             <div class="section-title">Hierarquia</div>
-            <div class="section-sub">Membros da unidade</div>
+            <div class="section-sub">Membros</div>
           </div>
         </div>
       </div>
@@ -235,8 +235,8 @@
             </svg>
           </div>
           <div>
-            <div class="section-title">Viaturas</div>
-            <div class="section-sub">Frota operacional</div>
+            <div class="section-title">Veículos</div>
+            <div class="section-sub">Frota</div>
           </div>
         </div>
       </div>
@@ -261,7 +261,7 @@
             </svg>
           </div>
           <div>
-            <div class="section-title">Apreensões</div>
+            <div class="section-title">Operações</div>
             <div class="section-sub">Registros recentes</div>
           </div>
         </div>
@@ -269,7 +269,7 @@
     </div>
     <div id="seizures-content"></div>
     <div style="text-align: center; margin-top: 30px;">
-      <a href="apreensoes.html" class="btn btn-secondary" style="display: inline-block; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; background: rgba(156, 163, 175, 0.25); color: #d1d5db; border: 1.5px solid rgba(156, 163, 175, 0.5);">VER TODAS AS APREENSÕES →</a>
+      <a href="apreensoes.html" class="btn btn-secondary" style="display: inline-block; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; background: rgba(156, 163, 175, 0.25); color: #d1d5db; border: 1.5px solid rgba(156, 163, 175, 0.5);">VER TODAS AS OPERAÇÕES →</a>
     </div>
   </div>
 </section>

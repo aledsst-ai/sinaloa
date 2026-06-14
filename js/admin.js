@@ -223,7 +223,7 @@ function renderAdminMembers() {
     <div class="form-card">
       <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">ADICIONAR MEMBRO</h3>
       <div class="form-group"><label>NOME *</label><input id="new-name" placeholder="Nome" required></div>
-      <div class="form-group"><label>PATENTE POLICIAL *</label><input id="new-police-rank" placeholder="Ex: 3º Sargento, Cabo, Soldado..." required></div>
+      <div class="form-group"><label>CARGO *</label><input id="new-police-rank" placeholder="Ex: Líder, Sub-líder, Membro..." required></div>
       <div class="form-group"><label>HIERARQUIA *</label><select id="new-rank" required><option value="">-- Selecione ou crie nova --</option>${rankOptions}<option value="__new__">+ CRIAR NOVA</option></select><input id="new-rank-custom" placeholder="Nome da hierarquia" style="display:none; margin-top: 4px;"></div>
       <div class="form-group"><label>NÍVEL *</label><input id="new-level" type="number" value="1" required></div>
       <div class="form-group"><label>STATUS</label><select id="new-status"><option value="ativo">Ativo</option><option value="inativo">Inativo</option></select></div>
@@ -278,7 +278,7 @@ function renderMembersList() {
     if (m) {
       html += '<div class="form-card"><h3 style="margin-bottom:12px;font-size:0.8rem;font-weight:700;">EDITAR: ' + escapeHtml(m.name) + '</h3>';
       html += '<div class="form-group"><label>NOME</label><input id="am-name-input" value="' + escapeHtml(m.name || '') + '"></div>';
-      html += '<div class="form-group"><label>PATENTE POLICIAL</label><input id="am-rank-input" value="' + escapeHtml(m.policeRank || '') + '"></div>';
+      html += '<div class="form-group"><label>CARGO</label><input id="am-rank-input" value="' + escapeHtml(m.policeRank || '') + '"></div>';
       html += '<div class="form-group"><label>NÍVEL</label><select id="am-level-select">' + [...Array(100).keys()].map(i => '<option value="' + i + '" ' + (m.level == i ? 'selected' : '') + '>Nv.' + i + '</option>').join('') + '</select></div>';
       html += '<div class="form-group"><label>STATUS</label><select id="am-status-select"><option value="ativo"' + (m.status === 'ativo' ? ' selected' : '') + '>Ativo</option><option value="inativo"' + (m.status === 'inativo' ? ' selected' : '') + '>Inativo</option></select></div>';
       html += '<div class="form-group"><label>DATA DE CADASTRO</label><input id="am-created-input" type="date" value="' + escapeHtml(formatDateForInput(m.createdAt)) + '"></div>';
@@ -317,7 +317,7 @@ function saveSelectedMember() {
   const newX = document.getElementById('am-x-input').value.trim().toLowerCase();
   const newDiscord = document.getElementById('am-discord-input').value.trim();
   if (newName) m.name = newName;
-  m.policeRank = newPoliceRank || m.policeRank || 'Soldado';
+  m.policeRank = newPoliceRank || m.policeRank || 'Membro';
   m.level = newLevel;
   m.status = newStatus;
   if (newCreatedAt) {
@@ -340,11 +340,11 @@ function renderAdminVehicles() {
   const body = document.getElementById('admin-body');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">ADICIONAR VIATURA</h3>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">ADICIONAR VEÍCULO</h3>
       <div class="form-group"><label>MODELO</label><input id="new-vname" placeholder="Ex: BMW M5"></div>
       <div class="form-group"><label>STATUS</label><select id="new-vstatus"><option value="disponivel">Disponível</option><option value="emuso">Em Uso</option><option value="manutencao">Manutenção</option></select></div>
       <div class="form-group"><label>IMAGEM URL</label><input id="new-vimg" placeholder="https://..."></div>
-      <button class="btn btn-primary" onclick="addVehicle()">ADICIONAR VIATURA</button>
+      <button class="btn btn-primary" onclick="addVehicle()">ADICIONAR VEÍCULO</button>
     </div>
     <div id="vehicles-list"></div>
   `;
@@ -353,7 +353,7 @@ function renderAdminVehicles() {
 
 function renderVehiclesList() {
   const container = document.getElementById('vehicles-list');
-  if (!vehicles.length) { container.innerHTML = '<div class="empty-card">Nenhuma viatura</div>'; return; }
+  if (!vehicles.length) { container.innerHTML = '                    <div class="empty-card">Nenhum veículo</div>'; return; }
   let html = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;justify-content:center;">';
   vehicles.forEach(v => {
     html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;padding:0;flex:1;min-width:280px;max-width:100%;">
@@ -388,13 +388,13 @@ function renderAdminSeizures() {
   }).join('');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR APREENSÃO</h3>
-      <div class="form-group"><label>QRU *</label><select id="new-desc" required><option value="">-- Selecione QRU --</option><option value="Caixa registradora">Caixa registradora</option><option value="Venda de drogas">Venda de drogas</option><option value="Assalto à residência">Assalto à residência</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Contrato ilegal">Contrato ilegal</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Arrombamento de veículo">Arrombamento de veículo</option><option value="Posto de combustível">Posto de combustível</option><option value="Ammunation">Ammunation</option><option value="Bebidas">Bebidas</option><option value="Loja de conveniência">Loja de conveniência</option><option value="Joalheria">Joalheria</option><option value="Banco Fleeca">Banco Fleeca</option></select><input id="new-desc-custom" placeholder="Ou digite um QRU personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR OPERAÇÃO</h3>
+      <div class="form-group"><label>TIPO *</label><select id="new-desc" required><option value="">-- Selecione --</option><option value="Roubo de carga">Roubo de carga</option><option value="Assalto a banco">Assalto a banco</option><option value="Tráfico de armas">Tráfico de armas</option><option value="Sequestro">Sequestro</option><option value="Homicídio contratado">Homicídio contratado</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Invasão">Invasão</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Venda de drogas">Venda de drogas</option><option value="Falsificação">Falsificação</option><option value="Lavagem de dinheiro">Lavagem de dinheiro</option><option value="Extorsão">Extorsão</option><option value="Resgate">Resgate</option></select><input id="new-desc-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="new-simg" placeholder="https://..." required></div>
       <div class="form-group"><label>BO URL *</label><input id="new-bo" placeholder="https://..." required></div>
-      <button class="btn btn-primary" onclick="addSeizure()">REGISTRAR APREENSÃO</button>
+      <button class="btn btn-primary" onclick="addSeizure()">REGISTRAR OPERAÇÃO</button>
     </div>
     <div id="seizures-list"></div>
   `;
@@ -403,7 +403,7 @@ function renderAdminSeizures() {
 
 function renderSeizuresList() {
   const container = document.getElementById('seizures-list');
-  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma apreensão</div>'; return; }
+  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma operação</div>'; return; }
   const sorted = [...seizures].reverse();
   const totalPages = Math.ceil(sorted.length / ADMIN_SEIZURES_PER_PAGE);
   if (adminSeizurePage > totalPages) adminSeizurePage = totalPages;
@@ -651,13 +651,13 @@ function renderMembersSeizures() {
   }).join('');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR APREENSÃO</h3>
-      <div class="form-group"><label>QRU *</label><select id="m-new-desc" required><option value="">-- Selecione QRU --</option><option value="Caixa registradora">Caixa registradora</option><option value="Venda de drogas">Venda de drogas</option><option value="Assalto à residência">Assalto à residência</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Contrato ilegal">Contrato ilegal</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Arrombamento de veículo">Arrombamento de veículo</option><option value="Posto de combustível">Posto de combustível</option><option value="Ammunation">Ammunation</option><option value="Bebidas">Bebidas</option><option value="Loja de conveniência">Loja de conveniência</option><option value="Joalheria">Joalheria</option><option value="Banco Fleeca">Banco Fleeca</option></select><input id="m-new-desc-custom" placeholder="Ou digite um QRU personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR OPERAÇÃO</h3>
+      <div class="form-group"><label>TIPO *</label><select id="m-new-desc" required><option value="">-- Selecione --</option><option value="Roubo de carga">Roubo de carga</option><option value="Assalto a banco">Assalto a banco</option><option value="Tráfico de armas">Tráfico de armas</option><option value="Sequestro">Sequestro</option><option value="Homicídio contratado">Homicídio contratado</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Invasão">Invasão</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Venda de drogas">Venda de drogas</option><option value="Falsificação">Falsificação</option><option value="Lavagem de dinheiro">Lavagem de dinheiro</option><option value="Extorsão">Extorsão</option><option value="Resgate">Resgate</option></select><input id="m-new-desc-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="m-new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="m-new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="m-new-simg" placeholder="https://..." required></div>
       <div class="form-group"><label>BO URL *</label><input id="m-new-bo" placeholder="https://..." required></div>
-      <button class="btn btn-primary" onclick="addSeizureMembers()">REGISTRAR APREENSÃO</button>
+      <button class="btn btn-primary" onclick="addSeizureMembers()">REGISTRAR OPERAÇÃO</button>
     </div>
     <div id="seizures-list-members"></div>
   `;
@@ -666,7 +666,7 @@ function renderMembersSeizures() {
 
 function renderSeizuresListMembers() {
   const container = document.getElementById('seizures-list-members');
-  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma apreensão</div>'; return; }
+  if (!seizures.length) { container.innerHTML = '<div class="empty-card">Nenhuma operação</div>'; return; }
   const sorted = [...seizures].reverse();
   const totalPages = Math.ceil(sorted.length / ADMIN_SEIZURES_PER_PAGE);
   if (membersSeizurePage > totalPages) membersSeizurePage = totalPages;
@@ -708,7 +708,7 @@ function addSeizureMembers() {
   const location = document.getElementById('m-new-location').value.trim();
   const imageUrl = document.getElementById('m-new-simg').value.trim();
   const boImageUrl = document.getElementById('m-new-bo').value.trim();
-  if (!desc) { alert("Selecione o QRU"); return; }
+  if (!desc) { alert("Selecione o tipo"); return; }
   if (!members.length) { alert("Selecione ao menos um membro responsável"); return; }
   if (!location) { alert("Informe o local"); return; }
   if (!imageUrl) { alert("Informe a URL da imagem"); return; }
@@ -722,7 +722,7 @@ function addSeizureMembers() {
 
 function renderMembersVehicles() {
   const body = document.getElementById('members-body');
-  body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar viaturas.</div>`;
+  body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar veículos.</div>`;
 }
 
 function renderMembersGallery() {
@@ -771,7 +771,7 @@ function addMember() {
   const newMember = { 
     id: Date.now().toString(), 
     name, 
-    policeRank: policeRank || 'Soldado', 
+    policeRank: policeRank || 'Membro', 
     rank,
     level, 
     status, 
@@ -826,7 +826,7 @@ function addVehicle() {
 }
 
 function deleteVehicle(id) {
-  if (!confirm("Remover esta viatura?")) return;
+  if (!confirm("Remover este veículo?")) return;
   vehicles = vehicles.filter(v => v.id !== id);
   saveData();
   renderAll();
@@ -842,7 +842,7 @@ function addSeizure() {
   const location = document.getElementById('new-location').value.trim();
   const imageUrl = document.getElementById('new-simg').value.trim();
   const boImageUrl = document.getElementById('new-bo').value.trim();
-  if (!desc) { alert("Selecione o QRU"); return; }
+  if (!desc) { alert("Selecione o tipo"); return; }
   if (!members.length) { alert("Selecione ao menos um membro responsável"); return; }
   if (!location) { alert("Informe o local"); return; }
   if (!imageUrl) { alert("Informe a URL da imagem"); return; }
@@ -856,7 +856,7 @@ function addSeizure() {
 }
 
 function deleteSeizure(id) {
-  if (!confirm("Remover esta apreensão?")) return;
+  if (!confirm("Remover esta operação?")) return;
   seizures = seizures.filter(s => s.id !== id);
   saveData();
   renderAll();
