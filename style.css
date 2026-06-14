@@ -2570,9 +2570,9 @@
 }
 
 @keyframes grain-shift {
-  0%   { transform: translate(0%, 0%); }
-  33%  { transform: translate(-5%, -10%); }
-  66%  { transform: translate(-15%, 5%); }
-  100% { transform: translate(0%, 0%); }
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(-1px, -2px); }
+  66%  { transform: translate(-3px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 
