@@ -1,6 +1,20 @@
 let currentAdminTab = 'members';
 let currentMembersTab = 'seizures';
 
+function unlockNegocios() {
+  const content = document.getElementById('negocios-content');
+  const locked = document.getElementById('negocios-locked');
+  if (content) content.classList.add('unlocked');
+  if (locked) locked.classList.add('unlocked');
+}
+
+function lockNegocios() {
+  const content = document.getElementById('negocios-content');
+  const locked = document.getElementById('negocios-locked');
+  if (content) content.classList.remove('unlocked');
+  if (locked) locked.classList.remove('unlocked');
+}
+
 function openAdminPanel() {
   const adminPasswordDialog = document.getElementById('adminPasswordDialog');
   if (!adminPasswordDialog) {
@@ -30,6 +44,7 @@ function submitAdminPassword() {
       document.body.style.overflow = 'hidden';
       switchAdminTab('seizures');
       closePasswordDialog('admin');
+      unlockNegocios();
     })
     .catch(error => {
       alert('Erro ao entrar: ' + (error.message || 'Senha incorreta'));
@@ -100,6 +115,7 @@ function submitMembersPassword() {
       document.body.style.overflow = 'hidden';
       switchMembersTab('seizures');
       closePasswordDialog('members');
+      unlockNegocios();
     })
     .catch(error => {
       alert('Erro ao entrar: ' + (error.message || 'Senha incorreta'));
@@ -154,6 +170,7 @@ function closeAdminPanel() {
     firebase.auth().signOut();
     currentAuthUser = null;
   }
+  lockNegocios();
 }
 
 function closeMembersPanel() {
@@ -162,6 +179,7 @@ function closeMembersPanel() {
     membersOverlay.classList.remove('open');
     document.body.style.overflow = '';
   }
+  lockNegocios();
   if (currentAuthUser === 'members') {
     firebase.auth().signOut();
     currentAuthUser = null;
