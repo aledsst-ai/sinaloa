@@ -531,6 +531,19 @@
       gap: 3px;
       width: auto;
     }
+    .member-avatar-badges .member-profile-badge {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.2);
+      color: #ffffff;
+    }
+    .member-avatar-badges .badge-sep {
+      color: rgba(255,255,255,0.3);
+    }
+    .member-avatar-badges .member-profile-twitch {
+      background: rgba(25,89,29,0.5);
+      border-color: rgba(25,89,29,0.7);
+      color: #ffffff;
+    }
     .member-social-link {
       display: inline-flex;
       align-items: center;
