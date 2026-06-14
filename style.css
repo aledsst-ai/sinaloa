@@ -2345,6 +2345,69 @@
       .footer-buttons { flex-direction: column; align-items: center; }
       .section-header { flex-direction: column; align-items: flex-start; }
     }
+    .negocios-card {
+      background: #f0f0f0;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .negocios-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .negocios-table thead {
+      background: rgba(0,0,0,0.04);
+    }
+    .negocios-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #1a1a1a;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+    .negocios-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      color: #1a1a1a;
+    }
+    .negocios-row--even {
+      background: rgba(0,0,0,0.02);
+    }
+    .negocios-row:hover {
+      background: rgba(198,40,40,0.04);
+    }
+    @media (max-width: 640px) {
+      .negocios-table thead { display: none; }
+      .negocios-table,
+      .negocios-table tbody,
+      .negocios-table tr,
+      .negocios-table td {
+        display: block;
+      }
+      .negocios-table tr {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+      }
+      .negocios-table td {
+        padding: 3px 0;
+        border: none;
+        text-align: right;
+        font-size: 11px;
+      }
+      .negocios-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+    }
     @media (max-width: 640px) {
       .container { padding: 0 20px; }
       nav { padding: 0 16px; }

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sinaloa - Negócios</title>
+  <meta name="description" content="Controle de fabricação e venda de munições."/>
+  <meta property="og:title" content="Sinaloa — Negócios"/>
+  <meta property="og:description" content="Fabricação e venda de munições"/>
+  <meta property="og:image" content="https://sinaloa.aledsst.workers.dev/assets/img/logo.png"/>
+  <meta property="og:type" content="website"/>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { padding-top: 100px; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="js/helpers.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5PfisZJ90gXsff_nVhyfLU78WmPl46Wo",
+      authDomain: "sinaloa-mtp.firebaseapp.com",
+      databaseURL: "https://sinaloa-mtp-default-rtdb.firebaseio.com",
+      projectId: "sinaloa-mtp",
+      storageBucket: "sinaloa-mtp.firebasestorage.app",
+      messagingSenderId: "1006569530779",
+      appId: "1:1006569530779:web:2e76d739e1d75987cb6d3e",
+      measurementId: "G-402327Y5EJ"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <a class="nav-brand" href="index.html">
+          <img src="assets/img/logo.png" alt="Logo Sinaloa" width="52" height="52">
+        </a>
+        <a href="index.html" class="back-btn" aria-label="Voltar ao site">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          <span>Voltar</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section-header" style="margin-bottom: 30px;">
+      <div class="section-title-wrapper">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </div>
+        <div>
+          <div class="section-title">Negócios</div>
+          <div class="section-sub">Fabricação e venda de munições</div>
+        </div>
+      </div>
+    </div>
+    <div id="negocios-page-content"></div>
+  </div>
+
+  <script>
+    var negociosPage = 1;
+    const NEGOCIOS_PER_PAGE = 10;
+
+    function renderNegociosFull(negociosData, page) {
+      if (typeof page === 'undefined') page = negociosPage;
+      const container = document.getElementById('negocios-page-content');
+
+      if (!negociosData.length) {
+        container.innerHTML = '<div class="empty-card" style="padding:40px;text-align:center;">Nenhum negócio registrado</div>';
+        return;
+      }
+
+      const sorted = [...negociosData].sort((a, b) => new Date(b.date) - new Date(a.date));
+      var totalPages = Math.ceil(sorted.length / NEGOCIOS_PER_PAGE);
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      negociosPage = page;
+
+      var start = (page - 1) * NEGOCIOS_PER_PAGE;
+      var end = Math.min(start + NEGOCIOS_PER_PAGE, sorted.length);
+      var pageItems = sorted.slice(start, end);
+
+      var html = '<div class="negocios-card">';
+      html += '<table class="negocios-table">';
+      html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor Unit.</th><th>Valor Total</th></tr></thead>';
+      html += '<tbody>';
+
+      pageItems.forEach(function(n, idx) {
+        var qtd = Number(n.quantidade || 0).toLocaleString('pt-BR');
+        var valor = Number(n.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        var total = Number(n.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        html += '<tr class="negocios-row' + (idx % 2 === 0 ? ' negocios-row--even' : '') + '">';
+        html += '<td data-label="Tipo">' + escapeHtml(n.tipo || '-') + '</td>';
+        html += '<td data-label="Quantidade">' + qtd + '</td>';
+        html += '<td data-label="Cliente">' + escapeHtml(n.cliente || '-') + '</td>';
+        html += '<td data-label="Valor Unit.">' + valor + '</td>';
+        html += '<td data-label="Valor Total">' + total + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      html += '</div>';
+
+      if (totalPages > 1) {
+        html += '<div style="display:flex;justify-content:center;align-items:center;gap:8px;padding:16px 0;flex-wrap:wrap;font-family:inherit;font-weight:700;font-size:12px;">';
+        html += '<button onclick="goToNegociosPage(' + (page - 1) + ')" style="padding:8px 16px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);color:#1a1a1a;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all 0.2s ease;' + (page <= 1 ? 'opacity:0.3;cursor:default;' : '') + '" ' + (page <= 1 ? 'disabled' : '') + '>❮ Anterior</button>';
+        html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+        for (var i = 1; i <= totalPages; i++) {
+          html += '<button onclick="goToNegociosPage(' + i + ')" style="padding:8px 12px;border-radius:6px;border:1px solid ' + (i === page ? '#1a1a1a' : 'rgba(0,0,0,0.15)') + ';background:' + (i === page ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.04)') + ';color:#1a1a1a;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all 0.2s ease;min-width:38px;">' + i + '</button>';
+        }
+        html += '</div>';
+        html += '<button onclick="goToNegociosPage(' + (page + 1) + ')" style="padding:8px 16px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);color:#1a1a1a;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all 0.2s ease;' + (page >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (page >= totalPages ? 'disabled' : '') + '>Próxima ❯</button>';
+        html += '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    function goToNegociosPage(page) {
+      var localData = JSON.parse(localStorage.getItem('sinaloa_negocios') || '[]');
+      var renderFn = function(data) { renderNegociosFull(data, page); };
+      var db = firebase.database();
+      db.ref('sinaloa-data').once('value').then(function(snapshot) {
+        var firebaseRoot = snapshot.val();
+        var data = [];
+        if (firebaseRoot && firebaseRoot.negocios) {
+          var fd = firebaseRoot.negocios;
+          data = Array.isArray(fd) ? fd : (fd && typeof fd === 'object' ? Object.values(fd) : []);
+        }
+        if (!data.length) data = localData;
+        renderFn(data);
+      }).catch(function() { renderFn(localData); });
+    }
+
+    function loadNegociosData() {
+      var localData = JSON.parse(localStorage.getItem('sinaloa_negocios') || '[]');
+      var db = firebase.database();
+      db.ref('sinaloa-data').once('value')
+        .then(function(snapshot) {
+          var firebaseRoot = snapshot.val();
+          var negociosData = [];
+          if (firebaseRoot && firebaseRoot.negocios) {
+            var firebaseData = firebaseRoot.negocios;
+            if (Array.isArray(firebaseData)) {
+              negociosData = firebaseData;
+            } else if (firebaseData && typeof firebaseData === 'object') {
+              negociosData = Object.values(firebaseData);
+            }
+          }
+          if (!negociosData.length) {
+            negociosData = localData;
+          }
+          localStorage.setItem('sinaloa_negocios', JSON.stringify(negociosData));
+          renderNegociosFull(negociosData);
+        })
+        .catch(function(error) {
+          console.warn('Erro ao carregar negócios do Firebase:', error);
+          renderNegociosFull(localData);
+        });
+    }
+
+    window.addEventListener('load', loadNegociosData);
+  </script>
+</body>
+</html>

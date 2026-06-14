@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', () => {
           <div style="display:flex;gap:2px;">
             <div class="admin-tab active">AÇÕES</div>
             <div class="admin-tab">MEMBROS</div>
-            <div class="admin-tab">GALERIA</div>
+            <div class="admin-tab">NEGÓCIOS</div>
             <div class="admin-tab">VEÍCULOS</div>
           </div>
           <div style="display:flex;gap:2px;margin-left:auto;">
@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="admin-header"><h2>PAINEL MEMBROS</h2><button class="btn btn-secondary" onclick="closeMembersPanel()">FECHAR</button></div>
         <div class="admin-tabs">
           <div class="admin-tab active">APREENSÕES</div>
-          <div class="admin-tab">GALERIA</div>
+          <div class="admin-tab">NEGÓCIOS</div>
           <div class="admin-tab">VEÍCULOS</div>
           <div class="admin-tab">MEMBROS</div>
         </div>
@@ -172,7 +172,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (adminTabs.length >= 6) {
       adminTabs[0].onclick = () => switchAdminTab('seizures');
       adminTabs[1].onclick = () => switchAdminTab('members');
-      adminTabs[2].onclick = () => switchAdminTab('gallery');
+      adminTabs[2].onclick = () => switchAdminTab('negocios');
       adminTabs[3].onclick = () => switchAdminTab('vehicles');
       adminTabs[4].onclick = () => switchAdminTab('rankOrder');
       adminTabs[5].onclick = () => switchAdminTab('settings');
@@ -182,7 +182,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const membersTabs = document.querySelectorAll('#members-overlay .admin-tab');
     if (membersTabs.length >= 4) {
       membersTabs[0].onclick = () => switchMembersTab('seizures');
-      membersTabs[1].onclick = () => switchMembersTab('gallery');
+      membersTabs[1].onclick = () => switchMembersTab('negocios');
       membersTabs[2].onclick = () => switchMembersTab('vehicles');
       membersTabs[3].onclick = () => switchMembersTab('members');
       console.log('✓ Members tabs event listeners attached');

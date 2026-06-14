@@ -2,6 +2,7 @@
 let vehicles = [];
 let seizures = [];
 let gallery = [];
+let negocios = [];
 let rankOrder = {};
 let currentAuthUser = null;
 let adminSeizurePage = 1;
@@ -9,6 +10,7 @@ let membersSeizurePage = 1;
 const ADMIN_SEIZURES_PER_PAGE = 8;
 const ADMIN_GALLERY_PER_PAGE = 6;
 let adminGalleryPage = 1;
+const ADMIN_NEGOCIOS_PER_PAGE = 10;
 
 function normalizeMemberAvatar(member) {
   if (!member || typeof member !== 'object') return null;
@@ -99,6 +101,7 @@ function loadData() {
         vehicles = JSON.parse(localStorage.getItem('sinaloa_vehicles') || '[]');
         seizures = JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]');
         gallery = JSON.parse(localStorage.getItem('sinaloa_gallery') || '[]');
+        negocios = JSON.parse(localStorage.getItem('sinaloa_negocios') || '[]');
         const savedRankOrder = localStorage.getItem('sinaloa_rankOrder');
         rankOrder = savedRankOrder ? JSON.parse(savedRankOrder) : {};
         localStorage.setItem('sinaloa_members', JSON.stringify(members));
@@ -128,7 +131,8 @@ function loadData() {
             members: data.members ? data.members.length : 0,
             vehicles: data.vehicles ? data.vehicles.length : 0,
             seizures: data.seizures ? data.seizures.length : 0,
-            gallery: data.gallery ? data.gallery.length : 0
+            gallery: data.gallery ? data.gallery.length : 0,
+            negocios: data.negocios ? data.negocios.length : 0
           });
           
           console.log('📦 Atualizando variáveis globais com dados do Firebase');
@@ -136,12 +140,14 @@ function loadData() {
           vehicles = normalizeArrayData(data.vehicles);
           seizures = normalizeArrayData(data.seizures);
           gallery = normalizeArrayData(data.gallery);
+          negocios = normalizeArrayData(data.negocios);
           rankOrder = data.rankOrder || {};
           console.log('✓ Dados carregados com sucesso do Firebase', { 
             members: members.length,
             vehicles: vehicles.length,
             seizures: seizures.length,
-            gallery: gallery.length
+            gallery: gallery.length,
+            negocios: negocios.length
           });
         } else {
           console.log('ℹ️ Firebase vazio, usando dados do localStorage');
@@ -176,8 +182,9 @@ function saveData() {
     console.log('💾 Tentando salvar dados:', {
       members: members.length,
       vehicles: vehicles.length,
-      seizures: seizures.length,
-      gallery: gallery.length
+        seizures: seizures.length,
+        gallery: gallery.length,
+        negocios: negocios.length
     });
     
     const sanitizedMembers = sanitizeMembersData(members);
@@ -188,6 +195,7 @@ function saveData() {
       vehicles: vehicles,
       seizures: seizures,
       gallery: gallery,
+      negocios: negocios,
       rankOrder: rankOrder,
       lastUpdated: new Date().toISOString()
     };
@@ -197,6 +205,7 @@ function saveData() {
       localStorage.setItem('sinaloa_vehicles', JSON.stringify(vehicles));
       localStorage.setItem('sinaloa_seizures', JSON.stringify(seizures));
       localStorage.setItem('sinaloa_gallery', JSON.stringify(gallery));
+      localStorage.setItem('sinaloa_negocios', JSON.stringify(negocios));
       localStorage.setItem('sinaloa_rankOrder', JSON.stringify(rankOrder));
       console.log('✓ Dados salvos em localStorage');
     } catch(e) {

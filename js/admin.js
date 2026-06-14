@@ -179,10 +179,9 @@ function switchAdminTab(tab) {
   } else if (tab === 'members') {
     tabs[1].classList.add('active');
     renderAdminMembers();
-  } else if (tab === 'gallery') {
+  } else if (tab === 'negocios') {
     tabs[2].classList.add('active');
-    adminGalleryPage = 1;
-    renderAdminGallery();
+    renderAdminNegocios();
   } else if (tab === 'vehicles') {
     tabs[3].classList.add('active');
     renderAdminVehicles();
@@ -202,9 +201,9 @@ function switchMembersTab(tab) {
   if (tab === 'seizures') {
     tabs[0].classList.add('active');
     renderMembersSeizures();
-  } else if (tab === 'gallery') {
+  } else if (tab === 'negocios') {
     tabs[1].classList.add('active');
-    renderMembersGallery();
+    renderMembersNegocios();
   } else if (tab === 'vehicles') {
     tabs[2].classList.add('active');
     renderMembersVehicles();
@@ -450,54 +449,111 @@ function renderSeizuresList() {
   container.innerHTML = html;
 }
 
-function renderAdminGallery() {
+function renderAdminNegocios() {
   const body = document.getElementById('admin-body');
   body.innerHTML = `
     <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">ADICIONAR FOTO À GALERIA</h3>
-      <div class="form-group"><label>TÍTULO *</label><input id="new-gallery-title" placeholder="Título da foto"></div>
-      <div class="form-group"><label>URL DA IMAGEM *</label><input id="new-gallery-img" placeholder="https://..."></div>
-      <button class="btn btn-primary" onclick="addGalleryImage()">ADICIONAR À GALERIA</button>
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR NEGÓCIO</h3>
+      <div class="form-group"><label>TIPO *</label>
+        <select id="new-neg-tipo" required>
+          <option value="">-- Selecione --</option>
+          <option value=".300 BLK">.300 BLK</option>
+          <option value="9mm">9mm</option>
+          <option value=".45 ACP">.45 ACP</option>
+          <option value="5.56 NATO">5.56 NATO</option>
+          <option value="7.62x39">7.62x39</option>
+          <option value="12 Gauge">12 Gauge</option>
+          <option value=".308 Win">.308 Win</option>
+          <option value="Outro">Outro</option>
+        </select>
+        <input id="new-neg-tipo-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:#f5f5f5;color:#1a1a1a;font-size:11px;outline:none;box-sizing:border-box;">
+      </div>
+      <div class="form-group"><label>QUANTIDADE *</label><input id="new-neg-quantidade" type="number" min="1" placeholder="Ex: 5000" required></div>
+      <div class="form-group"><label>CLIENTE *</label><input id="new-neg-cliente" placeholder="Nome do cliente" required></div>
+      <div class="form-group"><label>VALOR UNITÁRIO (R$) *</label><input id="new-neg-valor" type="number" step="0.01" min="0.01" placeholder="Ex: 2.50" required></div>
+      <div class="form-group"><label>VALOR TOTAL</label><div id="new-neg-total-display" style="font-size:14px;font-weight:700;color:var(--accent);padding:6px 0;">R$ 0,00</div></div>
+      <button class="btn btn-primary" onclick="addNegocio()">REGISTRAR NEGÓCIO</button>
     </div>
-    <div id="gallery-list"></div>
+    <div id="negocios-list"></div>
   `;
-  renderGalleryList();
+  
+  const qtdInput = document.getElementById('new-neg-quantidade');
+  const valorInput = document.getElementById('new-neg-valor');
+  const totalDisplay = document.getElementById('new-neg-total-display');
+  
+  function updateTotal() {
+    const qtd = parseFloat(qtdInput.value) || 0;
+    const val = parseFloat(valorInput.value) || 0;
+    const total = qtd * val;
+    totalDisplay.textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  
+  qtdInput.addEventListener('input', updateTotal);
+  valorInput.addEventListener('input', updateTotal);
+  
+  document.getElementById('new-neg-tipo').addEventListener('change', function() {
+    const customInput = document.getElementById('new-neg-tipo-custom');
+    if (this.value === 'Outro') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.style.display = 'none';
+    }
+  });
+  
+  renderNegociosList();
 }
 
-function renderGalleryList() {
-  const container = document.getElementById('gallery-list');
-  if (!gallery.length) { container.innerHTML = '<div class="empty-card">Nenhuma foto na galeria</div>'; return; }
-  const sorted = [...gallery].reverse();
-  const totalPages = Math.ceil(sorted.length / ADMIN_GALLERY_PER_PAGE);
-  if (adminGalleryPage > totalPages) adminGalleryPage = totalPages;
-  if (adminGalleryPage < 1) adminGalleryPage = 1;
-  const start = (adminGalleryPage - 1) * ADMIN_GALLERY_PER_PAGE;
-  const end = Math.min(start + ADMIN_GALLERY_PER_PAGE, sorted.length);
-  const pageItems = sorted.slice(start, end);
-  let html = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;justify-content:center;">';
-  pageItems.forEach(g => {
-    html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;padding:0;width:300px;">
-      <img src="${escapeHtml(g.imageUrl)}" alt="" style="width:100%;height:160px;object-fit:cover;display:block;" onerror="this.style.display='none'">
-      <div style="padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;">
-        <div style="min-width:0;flex:1;">
-          <div style="font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(g.title || 'Sem título')}</div>
-          <div style="font-size:10px;color:var(--text-muted);">${new Date(g.date).toLocaleDateString('pt-BR')}</div>
+function renderNegociosList() {
+  const container = document.getElementById('negocios-list');
+  if (!negocios.length) { container.innerHTML = '<div class="empty-card">Nenhum negócio registrado</div>'; return; }
+  const sorted = [...negocios].reverse();
+  const totalPages = Math.ceil(sorted.length / ADMIN_NEGOCIOS_PER_PAGE);
+  let page = 1;
+  
+  let html = '';
+  for (let p = 1; p <= totalPages; p++) {
+    const start = (p - 1) * ADMIN_NEGOCIOS_PER_PAGE;
+    const end = Math.min(start + ADMIN_NEGOCIOS_PER_PAGE, sorted.length);
+    const pageItems = sorted.slice(start, end);
+    
+    html += `<div class="page-content" data-page="${p}" style="${p !== 1 ? 'display:none;' : ''}">`;
+    pageItems.forEach(n => {
+      const qtd = Number(n.quantidade || 0).toLocaleString('pt-BR');
+      const valor = Number(n.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const total = Number(n.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      html += `<div class="admin-list-item" style="font-size:10px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:10px;font-weight:700;color:#1a1a1a;text-transform:uppercase;">${escapeHtml(n.tipo || '-')} — <span style="font-weight:400;color:var(--text-muted);text-transform:none;font-size:9px;">${new Date(n.date).toLocaleDateString('pt-BR')}</span></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${escapeHtml(n.cliente)} • ${qtd} un • ${valor} cada • Total: ${total}</div>
         </div>
-        <button class="btn btn-danger" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;" onclick="deleteGalleryImage('${g.id}')">REMOVER</button>
-      </div>
-    </div>`;
-  });
-  html += '</div>';
-  if (totalPages > 1) {
-    html += '<div style="display:flex;justify-content:center;align-items:center;gap:6px;padding:12px 0;font-size:11px;font-weight:700;">';
-    html += '<button onclick="adminGalleryPage=' + (adminGalleryPage - 1) + ';renderGalleryList()" style="padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;' + (adminGalleryPage <= 1 ? 'opacity:0.3;cursor:default;' : '') + '" ' + (adminGalleryPage <= 1 ? 'disabled' : '') + '>❮</button>';
-    for (var i = 1; i <= totalPages; i++) {
-      html += '<button onclick="adminGalleryPage=' + i + ';renderGalleryList()" style="padding:6px 10px;border-radius:6px;border:1px solid ' + (i === adminGalleryPage ? '#fff' : 'rgba(255,255,255,0.15)') + ';background:' + (i === adminGalleryPage ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.04)') + ';color:#fff;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;">' + i + '</button>';
-    }
-    html += '<button onclick="adminGalleryPage=' + (adminGalleryPage + 1) + ';renderGalleryList()" style="padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;' + (adminGalleryPage >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (adminGalleryPage >= totalPages ? 'disabled' : '') + '>❯</button>';
+        <button class="btn btn-danger" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;" onclick="deleteNegocio('${n.id}')">REMOVER</button>
+      </div>`;
+    });
     html += '</div>';
   }
+  
+  if (totalPages > 1) {
+    html += '<div style="display:flex;justify-content:center;align-items:center;gap:6px;padding:12px 0;font-size:10px;font-weight:700;font-family:inherit;">';
+    for (var i = 1; i <= totalPages; i++) {
+      html += `<button onclick="switchNegociosPage(${i})" id="neg-page-${i}" style="padding:6px 10px;border-radius:4px;border:1px solid ${i === 1 ? '#1a1a1a' : 'rgba(0,0,0,0.15)'};background:${i === 1 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.04)'};color:#1a1a1a;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;">${i}</button>`;
+    }
+    html += '</div>';
+  }
+  
   container.innerHTML = html;
+}
+
+function switchNegociosPage(page) {
+  document.querySelectorAll('#negocios-list .page-content').forEach(el => {
+    el.style.display = el.dataset.page == page ? '' : 'none';
+  });
+  document.querySelectorAll('#negocios-list [id^="neg-page-"]').forEach(el => {
+    const num = el.id.replace('neg-page-', '');
+    const isActive = num == page;
+    el.style.borderColor = isActive ? '#1a1a1a' : 'rgba(0,0,0,0.15)';
+    el.style.background = isActive ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.04)';
+  });
 }
 
 function renderAdminRankOrder() {
@@ -725,9 +781,9 @@ function renderMembersVehicles() {
   body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar veículos.</div>`;
 }
 
-function renderMembersGallery() {
+function renderMembersNegocios() {
   const body = document.getElementById('members-body');
-  body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar a galeria.</div>`;
+  body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar negócios.</div>`;
 }
 
 function renderMembersMembers() {
@@ -873,23 +929,30 @@ function approveSeizure(id) {
   renderAdminSeizures();
 }
 
-function addGalleryImage() {
-  const title = document.getElementById('new-gallery-title').value.trim();
-  const imageUrl = document.getElementById('new-gallery-img').value.trim();
-  if (!title) { alert("Informe o título da foto"); return; }
-  if (!imageUrl) { alert("Informe a URL da imagem"); return; }
-  gallery.push({ id: Date.now().toString(), title, imageUrl, date: new Date().toISOString() });
+function addNegocio() {
+  let tipo = document.getElementById('new-neg-tipo').value.trim();
+  const customTipo = document.getElementById('new-neg-tipo-custom').value.trim();
+  if (customTipo) tipo = customTipo;
+  const quantidade = parseInt(document.getElementById('new-neg-quantidade').value, 10);
+  const cliente = document.getElementById('new-neg-cliente').value.trim();
+  const valor = parseFloat(document.getElementById('new-neg-valor').value);
+  if (!tipo) { alert("Selecione ou digite o tipo"); return; }
+  if (!quantidade || quantidade < 1) { alert("Informe a quantidade"); return; }
+  if (!cliente) { alert("Informe o cliente"); return; }
+  if (!valor || valor <= 0) { alert("Informe o valor unitário"); return; }
+  const valorTotal = quantidade * valor;
+  negocios.push({ id: Date.now().toString(), tipo, quantidade, cliente, valor, valorTotal, date: new Date().toISOString() });
   saveData();
   renderAll();
-  renderAdminGallery();
+  renderAdminNegocios();
 }
 
-function deleteGalleryImage(id) {
-  if (!confirm("Remover esta foto da galeria?")) return;
-  gallery = gallery.filter(g => g.id !== id);
+function deleteNegocio(id) {
+  if (!confirm("Remover este negócio?")) return;
+  negocios = negocios.filter(n => n.id !== id);
   saveData();
   renderAll();
-  renderAdminGallery();
+  renderAdminNegocios();
 }
 
 function moveRankUp(rank) {

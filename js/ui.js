@@ -243,10 +243,7 @@ function renderLiveMemberCard(m, idx) {
 }
 
 function carouselPrevNext(type, direction) {
-  if (type === 'gallery') {
-    galleryPage = direction === 'prev' ? Math.max(0, galleryPage - 1) : galleryPage + 1;
-    renderGallery();
-  } else if (type === 'seizures') {
+  if (type === 'seizures') {
     seizuresPage = direction === 'prev' ? Math.max(0, seizuresPage - 1) : seizuresPage + 1;
     renderSeizures();
   } else if (type === 'live') {
@@ -256,10 +253,7 @@ function carouselPrevNext(type, direction) {
 }
 
 function goToCarouselPage(type, page) {
-  if (type === 'gallery') {
-    galleryPage = page;
-    renderGallery();
-  } else if (type === 'seizures') {
+  if (type === 'seizures') {
     seizuresPage = page;
     renderSeizures();
   } else if (type === 'live') {
@@ -287,46 +281,47 @@ function renderVehicles() {
   `).join('') + '</div>';
 }
 
-const GALLERY_PAGE_HOME = 3;
+const NEGOCIOS_PAGE_HOME = 10;
 
-function renderGallery() {
-  const container = document.getElementById('gallery-content');
+function renderNegocios() {
+  const container = document.getElementById('negocios-content');
   if (!container) return;
   
-  const sorted = normalizeArrayData(gallery).sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 9);
+  const sorted = normalizeArrayData(negocios).sort((a,b) => new Date(b.date) - new Date(a.date));
   
   if (!sorted.length) {
-    container.innerHTML = '<div class="empty-card">Nenhuma foto na galeria</div>';
+    container.innerHTML = '<div class="empty-card">Nenhum negócio registrado</div>';
     return;
   }
   
-  const totalPages = Math.ceil(sorted.length / GALLERY_PAGE_HOME);
-  if (galleryPage < 0) galleryPage = 0;
-  if (galleryPage >= totalPages) galleryPage = Math.max(0, totalPages - 1);
+  const pageItems = sorted.slice(0, NEGOCIOS_PAGE_HOME);
   
-  const start = galleryPage * GALLERY_PAGE_HOME;
-  const end = Math.min(start + GALLERY_PAGE_HOME, sorted.length);
-  const pageItems = sorted.slice(start, end);
+  let html = '<div class="negocios-card">';
+  html += '<table class="negocios-table">';
+  html += '<thead><tr><th>Tipo</th><th>Quantidade</th><th>Cliente</th><th>Valor</th><th>Valor Total</th></tr></thead>';
+  html += '<tbody>';
   
-  let html = '<div class="gallery-carousel-wrapper" style="position:relative;">';
-  let hasNav = totalPages > 1;
-  
-  if (hasNav) {
-    html += `<button class="carousel-btn seizures-carousel-btn seizures-arrow-left" onclick="galleryPage=${Math.max(0, galleryPage - 1)};renderGallery()" ${galleryPage <= 0 ? 'disabled' : ''}>❮</button>`;
-  }
-  
-  html += '<div class="simple-grid">';
-  html += pageItems.map((item, idx) => renderGalleryCard(item, idx)).join('');
-  html += '</div>';
-  
-  if (hasNav) {
-    html += `<button class="carousel-btn seizures-carousel-btn seizures-arrow-right" onclick="galleryPage=${Math.min(totalPages - 1, galleryPage + 1)};renderGallery()" ${galleryPage >= totalPages - 1 ? 'disabled' : ''}>❯</button>`;
+  pageItems.forEach((item, idx) => {
+    const tipo = escapeHtml(item.tipo || '-');
+    const qtd = Number(item.quantidade || 0).toLocaleString('pt-BR');
+    const cliente = escapeHtml(item.cliente || '-');
+    const valor = Number(item.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const valorTotal = Number(item.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const dateStr = item.date ? new Date(item.date).toLocaleDateString('pt-BR') : '';
     
-    html += '<div class="gallery-carousel-dots">';
-    for (var i = 0; i < totalPages; i++) {
-      html += `<span class="gallery-dot ${i === galleryPage ? 'active' : ''}" onclick="galleryPage=${i};renderGallery()"></span>`;
-    }
-    html += '</div>';
+    html += `<tr class="negocios-row ${idx % 2 === 0 ? 'negocios-row--even' : ''}">
+      <td data-label="Tipo">${tipo}</td>
+      <td data-label="Quantidade">${qtd}</td>
+      <td data-label="Cliente">${cliente}</td>
+      <td data-label="Valor">${valor}</td>
+      <td data-label="Valor Total">${valorTotal}</td>
+    </tr>`;
+  });
+  
+  html += '</tbody></table>';
+  
+  if (sorted.length > NEGOCIOS_PAGE_HOME) {
+    html += '<div style="text-align:center;padding:16px 0 8px;"><a href="negocios.html" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;">VER TODOS OS NEGÓCIOS →</a></div>';
   }
   
   html += '</div>';
@@ -458,7 +453,7 @@ function renderAll() {
   renderLiveMembers();
   renderVehicles();
   renderSeizures();
-  renderGallery();
+  renderNegocios();
   updateStats();
 }
 

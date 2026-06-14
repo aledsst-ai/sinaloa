@@ -4,7 +4,7 @@ $sections = @(
     @{name='dashboard'; file='dashboard/dashboard.html'},
     @{name='membros-ao-vivo'; file='membros-ao-vivo/membros-ao-vivo.html'},
     @{name='hierarquia'; file='hierarquia/hierarquia.html'},
-    @{name='galeria'; file='galeria/galeria.html'},
+    @{name='negocios'; file='negocios/negocios.html'},
     @{name='viaturas'; file='viaturas/viaturas.html'},
     @{name='apreensoes'; file='apreensoes/apreensoes.html'},
     @{name='footer'; file='footer/footer.html'}
