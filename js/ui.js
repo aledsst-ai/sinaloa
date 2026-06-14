@@ -444,7 +444,6 @@ function renderAll() {
   renderLiveMembers();
   renderVehicles();
   renderSeizures();
-  renderNegocios();
   updateStats();
 }
 

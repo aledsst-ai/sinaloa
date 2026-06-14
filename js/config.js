@@ -154,9 +154,12 @@ function loadData() {
         }
         firebaseInitialSyncCompleted = true;
         console.log('✅ Firebase initial sync completed');
+        renderHierarchy();
+        renderLiveMembers();
         renderVehicles();
         renderSeizures();
         renderGallery();
+        updateStats();
         if (typeof updateAllStreamStatus === 'function') {
           setTimeout(() => updateAllStreamStatus(true), 50);
         }
