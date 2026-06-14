@@ -735,10 +735,6 @@ function renderNegociosPanel() {
   container.innerHTML = html;
 }
 
-  html += '</tbody></table>';
-  container.innerHTML = html;
-}
-
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     const authModal = document.getElementById('negociosAuthModal');
