@@ -2,7 +2,6 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sections = @(
     @{name='header'; file='header/header.html'},
     @{name='dashboard'; file='dashboard/dashboard.html'},
-    @{name='sobre'; file='sobre/sobre.html'},
     @{name='membros-ao-vivo'; file='membros-ao-vivo/membros-ao-vivo.html'},
     @{name='hierarquia'; file='hierarquia/hierarquia.html'},
     @{name='galeria'; file='galeria/galeria.html'},
