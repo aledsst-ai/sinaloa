@@ -606,7 +606,7 @@ function renderMemberProfile(member) {
         <div class="seizures-carousel-container">
           ${seizuresHtml}
         </div>
-        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:#ffffff;text-decoration:none;font-weight:600;">VER MAIS OPERAÇÕES →</a></div>
+        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;">VER MAIS OPERAÇÕES →</a></div>
       </div>
     `;
 
