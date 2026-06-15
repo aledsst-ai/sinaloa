@@ -295,7 +295,8 @@ function renderMembersList() {
     if (m) {
       html += '<div class="form-card"><h3 style="margin-bottom:12px;font-size:0.8rem;font-weight:700;">EDITAR: ' + escapeHtml(m.name) + '</h3>';
       html += '<div class="form-group"><label>NOME</label><input id="am-name-input" value="' + escapeHtml(m.name || '') + '"></div>';
-      html += '<div class="form-group"><label>CARGO</label><input id="am-rank-input" value="' + escapeHtml(m.policeRank || '') + '"></div>';
+      html += '<div class="form-group"><label>CARGO (Patente Policial)</label><input id="am-police-rank-input" value="' + escapeHtml(m.policeRank || '') + '"></div>';
+      html += '<div class="form-group"><label>HIERARQUIA</label><select id="am-rank-input">' + Object.keys(rankOrder).map(r => '<option value="' + escapeHtml(r) + '" ' + (m.rank === r ? 'selected' : '') + '>' + escapeHtml(r) + '</option>').join('') + '<option value="__new__">+ Nova hierarquia</option></select><input id="am-rank-custom" placeholder="Nome da nova hierarquia" style="display:none;margin-top:4px;"></div>';
       html += '<div class="form-group"><label>NÍVEL</label><select id="am-level-select">' + [...Array(100).keys()].map(i => '<option value="' + i + '" ' + (m.level == i ? 'selected' : '') + '>Nv.' + i + '</option>').join('') + '</select></div>';
       html += '<div class="form-group"><label>STATUS</label><select id="am-status-select"><option value="ativo"' + (m.status === 'ativo' ? ' selected' : '') + '>Ativo</option><option value="inativo"' + (m.status === 'inativo' ? ' selected' : '') + '>Inativo</option></select></div>';
       html += '<div class="form-group"><label>DATA DE CADASTRO</label><input id="am-created-input" type="date" value="' + escapeHtml(formatDateForInput(m.createdAt)) + '"></div>';
@@ -312,9 +313,17 @@ function renderMembersList() {
       html += '</div></div>';
     }
   }
-  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
-html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
-container.innerHTML = html;
+  container.innerHTML = html;
+
+  document.getElementById('am-rank-input').addEventListener('change', function() {
+    const customInput = document.getElementById('am-rank-custom');
+    if (this.value === '__new__') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.style.display = 'none';
+    }
+  });
 }
 
 function selectAdminMember(id) {
@@ -326,7 +335,11 @@ function saveSelectedMember() {
   const m = members.find(x => x.id === selectedAdminMember);
   if (!m) return;
   const newName = document.getElementById('am-name-input').value.trim();
-  const newPoliceRank = document.getElementById('am-rank-input').value.trim();
+  const newPoliceRank = document.getElementById('am-police-rank-input').value.trim();
+  let newRank = document.getElementById('am-rank-input').value.trim();
+  if (newRank === '__new__') {
+    newRank = document.getElementById('am-rank-custom').value.trim();
+  }
   const newLevel = document.getElementById('am-level-select').value;
   const newStatus = document.getElementById('am-status-select').value;
   const newCreatedAt = document.getElementById('am-created-input').value;
@@ -337,6 +350,7 @@ function saveSelectedMember() {
   const newDiscord = document.getElementById('am-discord-input').value.trim();
   if (newName) m.name = newName;
   m.policeRank = newPoliceRank || m.policeRank || 'Membro';
+  if (newRank) m.rank = newRank;
   m.level = newLevel;
   m.status = newStatus;
   if (newCreatedAt) {
