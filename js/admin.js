@@ -424,7 +424,17 @@ function renderAdminSeizures() {
   body.innerHTML = `
     <div class="form-card">
       <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">REGISTRAR AÇÃO</h3>
-      <div class="form-group"><label>TIPO *</label><select id="new-desc" required><option value="">-- Selecione --</option><option value="Roubo de carga">Roubo de carga</option><option value="Assalto a banco">Assalto a banco</option><option value="Tráfico de armas">Tráfico de armas</option><option value="Sequestro">Sequestro</option><option value="Homicídio contratado">Homicídio contratado</option><option value="Roubo de veículo">Roubo de veículo</option><option value="Invasão">Invasão</option><option value="Corrida ilegal">Corrida ilegal</option><option value="Venda de drogas">Venda de drogas</option><option value="Falsificação">Falsificação</option><option value="Lavagem de dinheiro">Lavagem de dinheiro</option><option value="Extorsão">Extorsão</option><option value="Resgate">Resgate</option></select><input id="new-desc-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;"></div>
+      <div class="form-group"><label>TIPO *</label>
+        <div style="display:flex;gap:4px;">
+          <select id="new-desc" required style="flex:1;">
+            <option value="">-- Selecione ou crie nova --</option>
+            ${[...new Set((normalizeArrayData(seizures) || []).map(s => s.description).filter(Boolean))].sort().map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('')}
+            <option value="__new__">+ CRIAR NOVA</option>
+          </select>
+          <button type="button" class="btn" onclick="inativarTipoSelecionado()" style="padding:4px 8px;font-size:10px;font-weight:700;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff0000;">INATIVAR</button>
+        </div>
+        <input id="new-desc-custom" placeholder="Nome do novo tipo" style="display:none;margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;">
+      </div>
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="new-simg" placeholder="https://..." required></div>
@@ -433,6 +443,17 @@ function renderAdminSeizures() {
     </div>
     <div id="seizures-list"></div>
   `;
+  
+  document.getElementById('new-desc').addEventListener('change', function() {
+    const customInput = document.getElementById('new-desc-custom');
+    if (this.value === '__new__') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.style.display = 'none';
+    }
+  });
+  
   renderSeizuresList();
 }
 
@@ -972,7 +993,7 @@ function addSeizure() {
   const location = document.getElementById('new-location').value.trim();
   const imageUrl = document.getElementById('new-simg').value.trim();
   const boImageUrl = document.getElementById('new-bo').value.trim();
-  if (!desc) { alert("Selecione o tipo"); return; }
+  if (!desc || desc === '__new__') { alert("Selecione ou digite o tipo"); return; }
   if (!members.length) { alert("Selecione ao menos um membro responsável"); return; }
   if (!location) { alert("Informe o local"); return; }
   if (!imageUrl) { alert("Informe a URL da imagem"); return; }
@@ -980,6 +1001,25 @@ function addSeizure() {
   if (imageUrl === boImageUrl) { alert("A URL da imagem deve ser diferente da URL do BO"); return; }
   seizures.push({ id: Date.now().toString(), description: desc, member: members, location, imageUrl, boImageUrl, date: new Date().toISOString(), approved: true });
   adminSeizurePage = 1;
+  saveData();
+  renderAll();
+  renderAdminSeizures();
+}
+
+function inativarTipoSelecionado() {
+  const select = document.getElementById('new-desc');
+  const tipo = select.value;
+  if (!tipo || tipo === '__new__') {
+    alert('Selecione um tipo para inativar');
+    return;
+  }
+  if (!tiposInativos) tiposInativos = [];
+  const idx = tiposInativos.indexOf(tipo);
+  if (idx > -1) {
+    tiposInativos.splice(idx, 1);
+  } else {
+    tiposInativos.push(tipo);
+  }
   saveData();
   renderAll();
   renderAdminSeizures();

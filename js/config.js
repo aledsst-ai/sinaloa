@@ -5,6 +5,7 @@ let gallery = [];
 let negocios = [];
 let rankOrder = {};
 let clientesInativos = [];
+let tiposInativos = [];
 let currentAuthUser = null;
 let adminSeizurePage = 1;
 let membersSeizurePage = 1;
@@ -107,6 +108,8 @@ function loadData() {
           rankOrder = savedRankOrder ? JSON.parse(savedRankOrder) : {};
           const savedClientesInativos = localStorage.getItem('sinaloa_clientesInativos');
           clientesInativos = savedClientesInativos ? JSON.parse(savedClientesInativos) : [];
+          const savedTiposInativos = localStorage.getItem('sinaloa_tiposInativos');
+          tiposInativos = savedTiposInativos ? JSON.parse(savedTiposInativos) : [];
           localStorage.setItem('sinaloa_members', JSON.stringify(members));
           console.log('💾 Dados carregados de localStorage e normalizados');
         }
@@ -146,13 +149,15 @@ function loadData() {
           negocios = normalizeArrayData(data.negocios);
           rankOrder = data.rankOrder || {};
           clientesInativos = data.clientesInativos || [];
+          tiposInativos = data.tiposInativos || [];
           console.log('✓ Dados carregados com sucesso do Firebase', { 
             members: members.length,
             vehicles: vehicles.length,
             seizures: seizures.length,
             gallery: gallery.length,
             negocios: negocios.length,
-            clientesInativos: clientesInativos.length
+            clientesInativos: clientesInativos.length,
+            tiposInativos: tiposInativos.length
           });
         } else {
           console.log('ℹ️ Firebase vazio, usando dados do localStorage');
@@ -194,7 +199,8 @@ function saveData() {
         seizures: seizures.length,
         gallery: gallery.length,
         negocios: negocios.length,
-        clientesInativos: clientesInativos.length
+        clientesInativos: clientesInativos.length,
+        tiposInativos: tiposInativos.length
     });
     
     const sanitizedMembers = sanitizeMembersData(members);
@@ -208,6 +214,7 @@ function saveData() {
       negocios: negocios,
       rankOrder: rankOrder,
       clientesInativos: clientesInativos,
+      tiposInativos: tiposInativos,
       lastUpdated: new Date().toISOString()
     };
     
@@ -219,6 +226,7 @@ function saveData() {
       localStorage.setItem('sinaloa_negocios', JSON.stringify(negocios));
       localStorage.setItem('sinaloa_rankOrder', JSON.stringify(rankOrder));
       localStorage.setItem('sinaloa_clientesInativos', JSON.stringify(clientesInativos));
+      localStorage.setItem('sinaloa_tiposInativos', JSON.stringify(tiposInativos));
       console.log('✓ Dados salvos em localStorage');
     } catch(e) {
       console.warn('⚠️ Erro ao salvar em localStorage:', e);
