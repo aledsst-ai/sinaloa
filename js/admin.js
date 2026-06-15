@@ -508,11 +508,14 @@ function renderAdminNegocios() {
       </div>
       <div class="form-group"><label>QUANTIDADE *</label><input id="new-neg-quantidade" type="number" min="1" placeholder="Ex: 5000" required></div>
       <div class="form-group"><label>CLIENTE *</label>
-        <select id="new-neg-cliente" required>
-          <option value="">-- Selecione ou crie novo --</option>
-          ${[...new Set((normalizeArrayData(negocios) || []).map(n => n.cliente).filter(Boolean))].sort().map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
-          <option value="__new__">+ CRIAR NOVO</option>
-        </select>
+        <div style="display:flex;gap:4px;">
+          <select id="new-neg-cliente" required style="flex:1;">
+            <option value="">-- Selecione ou crie novo --</option>
+            ${[...new Set((normalizeArrayData(negocios) || []).map(n => n.cliente).filter(Boolean))].sort().map(c => `<option value="${escapeHtml(c)}">${clientesInativos.includes(c) ? '(X) ' : ''}${escapeHtml(c)}</option>`).join('')}
+            <option value="__new__">+ CRIAR NOVO</option>
+          </select>
+          <button type="button" class="btn" onclick="inativarClienteSelecionado()" style="padding:4px 8px;font-size:10px;font-weight:700;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff0000;">INATIVAR</button>
+        </div>
         <input id="new-neg-cliente-custom" placeholder="Nome do novo cliente" style="display:none;margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:#f5f5f5;color:#1a1a1a;font-size:11px;outline:none;box-sizing:border-box;">
       </div>
       <div class="form-group"><label>VALOR UNITÁRIO (R$) *</label><input id="new-neg-valor" type="number" step="0.01" min="0.01" placeholder="Ex: 2.50" required></div>
@@ -1034,6 +1037,24 @@ function deleteNegocio(id) {
 
 function toggleClienteInativo(cliente) {
   if (!cliente) return;
+  const idx = clientesInativos.indexOf(cliente);
+  if (idx > -1) {
+    clientesInativos.splice(idx, 1);
+  } else {
+    clientesInativos.push(cliente);
+  }
+  saveData();
+  renderAll();
+  renderAdminNegocios();
+}
+
+function inativarClienteSelecionado() {
+  const select = document.getElementById('new-neg-cliente');
+  const cliente = select.value;
+  if (!cliente || cliente === '__new__') {
+    alert('Selecione um cliente para inativar');
+    return;
+  }
   const idx = clientesInativos.indexOf(cliente);
   if (idx > -1) {
     clientesInativos.splice(idx, 1);
