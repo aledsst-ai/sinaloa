@@ -1078,9 +1078,9 @@
       gap: 6px;
     }
     .stats-group-title {
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      color: var(--text-muted);
+      color: #fff;
       letter-spacing: 0.06em;
       white-space: nowrap;
     }
