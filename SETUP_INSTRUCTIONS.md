@@ -55,12 +55,7 @@ git commit -m "Initial commit"
 git push -u origin main
 ```
 
-## 5. Cloudflare Workers/Pages
-- Dashboard > Workers & Pages > Create application > Pages > Connect to Git
-- Selecionar repositório
-- Build settings: None (site estático)
-- Save and Deploy
-- Desativar auto-deploy em Settings > Builds & deployments
+
 
 ## 6. Atualizar domínio
 - Atualizar `og:url` no `index.html` para o URL da Cloudflare

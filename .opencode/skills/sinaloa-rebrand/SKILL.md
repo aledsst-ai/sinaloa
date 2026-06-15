@@ -47,7 +47,7 @@ This skill guides the complete rebranding of the Sinaloa dashboard to a new Five
 
 ### 7. Deploy
 - Set up git for the new project
-- Create a new Cloudflare Pages project (or Workers)
+ - Create a new Cloudflare Workers project (or Workers)
 - Push and configure auto-deploy
 
 ### 8. Verification

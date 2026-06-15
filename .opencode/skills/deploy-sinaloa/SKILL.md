@@ -1,6 +1,6 @@
 ---
 name: deploy-sinaloa
-description: Build, commit, push and deploy the Sinaloa project to Cloudflare Pages
+description: Build, commit, push and deploy the Sinaloa project to Cloudflare Workers
 ---
 
 ## Steps
@@ -10,7 +10,7 @@ description: Build, commit, push and deploy the Sinaloa project to Cloudflare Pa
 4. Commit with a concise message describing the changes (present tense, no period)
 5. Push to `origin/main`
 6. Verify the deploy by fetching `https://sinaloa.aledsst.workers.dev` and checking for the expected changes
-7. If deploy seems stale, ask the user to check the Cloudflare Pages dashboard
+7. If deploy seems stale, ask the user to check the Cloudflare Workers dashboard
 
 ## Context
 - Repo: https://github.com/aledsst-ai/sinaloa.git
