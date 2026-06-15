@@ -133,7 +133,7 @@
 
     #intro {
       position: fixed; inset: 0; z-index: 9999;
-      background: #0a0a0a;
+      background: #fff;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 20px;
@@ -144,7 +144,7 @@
     .skip-splash #intro .bar-fill,
     .skip-splash #intro img { animation: none !important; }
     #intro img { width: 357px; height: 357px; object-fit: contain; opacity: 0.8; animation: pulse 2s ease-in-out infinite; }
-    #intro .brand { font-size: 0.8rem; letter-spacing: 0.3em; color: var(--text-secondary); font-weight: 400; font-family: inherit; }
+    #intro .brand { font-size: 0.8rem; letter-spacing: 0.3em; color: var(--text-secondary); font-weight: 700; font-family: inherit; }
     #intro .bar { width: 140px; height: 1px; background: var(--border); overflow: hidden; }
     #intro .bar-fill { height: 100%; width: 0%; background: var(--accent); animation: loadBar 2s ease forwards; }
     @keyframes loadBar { to { width: 100%; } }
