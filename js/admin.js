@@ -582,7 +582,10 @@ function renderNegociosList() {
           <div style="font-size:10px;font-weight:700;color:#1a1a1a;text-transform:uppercase;">${escapeHtml(n.tipo || '-')} — <span style="font-weight:400;color:var(--text-muted);text-transform:none;font-size:9px;">${new Date(n.date).toLocaleDateString('pt-BR')}</span></div>
           <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${escapeHtml(n.cliente)} • ${qtd} un • ${valor} cada • Total: ${total}</div>
         </div>
-        <button class="btn btn-danger" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;" onclick="deleteNegocio('${n.id}')">REMOVER</button>
+        <div style="display:flex;gap:4px;">
+          <button class="btn" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;background:${clientesInativos.includes(n.cliente) ? 'rgba(34,197,94,0.2)' : 'rgba(255,165,0,0.2)'};border:1px solid ${clientesInativos.includes(n.cliente) ? 'rgba(34,197,94,0.4)' : 'rgba(255,165,0,0.4)'};color:${clientesInativos.includes(n.cliente) ? '#22c55e' : '#ffa500'};" onclick="toggleClienteInativo('${escapeHtml(n.cliente)}')">${clientesInativos.includes(n.cliente) ? 'ATIVAR' : 'INATIVAR'}</button>
+          <button class="btn btn-danger" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;" onclick="deleteNegocio('${n.id}')">REMOVER</button>
+        </div>
       </div>`;
     });
     html += '</div>';
@@ -1024,6 +1027,19 @@ function addNegocio() {
 function deleteNegocio(id) {
   if (!confirm("Remover este negócio?")) return;
   negocios = negocios.filter(n => n.id !== id);
+  saveData();
+  renderAll();
+  renderAdminNegocios();
+}
+
+function toggleClienteInativo(cliente) {
+  if (!cliente) return;
+  const idx = clientesInativos.indexOf(cliente);
+  if (idx > -1) {
+    clientesInativos.splice(idx, 1);
+  } else {
+    clientesInativos.push(cliente);
+  }
   saveData();
   renderAll();
   renderAdminNegocios();

@@ -788,10 +788,11 @@ function renderNegociosPanel() {
     const valor = Number(n.valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const total = Number(n.valorTotal || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const dateStr = n.date ? new Date(n.date).toLocaleDateString('pt-BR') : '';
+    const clienteDisplay = clientesInativos.includes(n.cliente) ? `(X) ${escapeHtml(n.cliente || '-')}` : escapeHtml(n.cliente || '-');
     html += `<tr>
       <td data-label="Tipo">${escapeHtml(n.tipo || '-')}</td>
       <td data-label="Quantidade">${qtd}</td>
-      <td data-label="Cliente">${escapeHtml(n.cliente || '-')}</td>
+      <td data-label="Cliente">${clienteDisplay}</td>
       <td data-label="Valor Unit.">${valor}</td>
       <td data-label="Valor Total">${total}</td>
       <td data-label="Data">${dateStr}</td>
