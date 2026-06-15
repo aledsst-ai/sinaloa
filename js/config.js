@@ -94,22 +94,22 @@ function loadData() {
       return;
     }
     
-    try {
-      const localMembers = localStorage.getItem('sinaloa_members');
-      if (localMembers) {
-        members = sanitizeMembersData(JSON.parse(localMembers));
-        vehicles = JSON.parse(localStorage.getItem('sinaloa_vehicles') || '[]');
-        seizures = JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]');
-        gallery = JSON.parse(localStorage.getItem('sinaloa_gallery') || '[]');
-        negocios = JSON.parse(localStorage.getItem('sinaloa_negocios') || '[]');
-        const savedRankOrder = localStorage.getItem('sinaloa_rankOrder');
-        rankOrder = savedRankOrder ? JSON.parse(savedRankOrder) : {};
-        localStorage.setItem('sinaloa_members', JSON.stringify(members));
-        console.log('💾 Dados carregados de localStorage e normalizados');
+      try {
+        const localMembers = localStorage.getItem('sinaloa_members');
+        if (localMembers) {
+          members = sanitizeMembersData(normalizeArrayData(JSON.parse(localMembers)));
+          vehicles = normalizeArrayData(JSON.parse(localStorage.getItem('sinaloa_vehicles') || '[]'));
+          seizures = normalizeArrayData(JSON.parse(localStorage.getItem('sinaloa_seizures') || '[]'));
+          gallery = normalizeArrayData(JSON.parse(localStorage.getItem('sinaloa_gallery') || '[]'));
+          negocios = normalizeArrayData(JSON.parse(localStorage.getItem('sinaloa_negocios') || '[]'));
+          const savedRankOrder = localStorage.getItem('sinaloa_rankOrder');
+          rankOrder = savedRankOrder ? JSON.parse(savedRankOrder) : {};
+          localStorage.setItem('sinaloa_members', JSON.stringify(members));
+          console.log('💾 Dados carregados de localStorage e normalizados');
+        }
+      } catch(e) {
+        console.warn('⚠️ Erro ao carregar de localStorage:', e);
       }
-    } catch(e) {
-      console.warn('⚠️ Erro ao carregar de localStorage:', e);
-    }
     
     try {
       const db = firebase.database();
@@ -136,7 +136,7 @@ function loadData() {
           });
           
           console.log('📦 Atualizando variáveis globais com dados do Firebase');
-          members = sanitizeMembersData(data.members || []);
+          members = sanitizeMembersData(normalizeArrayData(data.members));
           vehicles = normalizeArrayData(data.vehicles);
           seizures = normalizeArrayData(data.seizures);
           gallery = normalizeArrayData(data.gallery);
