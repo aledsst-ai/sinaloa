@@ -206,8 +206,11 @@ function switchAdminTab(tab) {
   } else if (tab === 'rankOrder') {
     tabs[4].classList.add('active');
     renderAdminRankOrder();
-  } else if (tab === 'settings') {
+  } else if (tab === 'manage') {
     tabs[5].classList.add('active');
+    renderAdminManage();
+  } else if (tab === 'settings') {
+    tabs[6].classList.add('active');
     renderAdminSettings();
   }
 }
@@ -686,6 +689,170 @@ function renderAdminRankOrder() {
     </div>
   `;
   body.innerHTML = html;
+}
+
+function renderAdminManage() {
+  const body = document.getElementById('admin-body');
+  
+  // Get unique action types from seizures
+  const actionTypes = [...new Set((normalizeArrayData(seizures) || []).map(s => s.description).filter(Boolean))].sort();
+  
+  // Get unique business types from negocios
+  const businessTypes = [...new Set((normalizeArrayData(negocios) || []).map(n => n.tipo).filter(Boolean))].sort();
+  
+  let html = `
+    <div class="form-card">
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">GERENCIAR NOMES DE AÇÕES</h3>
+      <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Adicione ou remova tipos de ações</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input id="new-action-type" placeholder="Novo tipo de ação" style="flex:1;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;">
+        <button class="btn" style="padding:6px 12px;font-size:10px;font-weight:700;background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.4);color:#22c55e;" onclick="addNewActionType()">ADICIONAR</button>
+      </div>
+      <div id="action-types-list">
+  `;
+  
+  actionTypes.forEach(type => {
+    const isInactive = tiposInativos.includes(type);
+    html += `
+      <div class="admin-list-item" style="font-size:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:${isInactive ? '#ff0000' : '#fff'};${isInactive ? 'text-decoration:line-through;' : ''}">${escapeHtml(type)}</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn" style="padding:4px 8px;font-size:9px;font-weight:700;background:${isInactive ? 'rgba(34,197,94,0.2)' : 'rgba(255,0,0,0.2)'};border:1px solid ${isInactive ? 'rgba(34,197,94,0.4)' : 'rgba(255,0,0,0.3)'};color:${isInactive ? '#22c55e' : '#ff0000'};" onclick="toggleTipoInativo('${escapeHtml(type)}')">${isInactive ? 'ATIVAR' : 'INATIVAR'}</button>
+          <button class="btn btn-danger" style="padding:4px 8px;font-size:9px;font-weight:700;" onclick="deleteActionType('${escapeHtml(type)}')">REMOVER</button>
+        </div>
+      </div>
+    `;
+  });
+  
+  html += `
+      </div>
+    </div>
+    <div class="form-card">
+      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">GERENCIAR TIPOS DE NEGÓCIO</h3>
+      <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Adicione ou remova tipos de negócio</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input id="new-business-type" placeholder="Novo tipo de negócio" style="flex:1;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:#fff;font-size:11px;outline:none;box-sizing:border-box;">
+        <button class="btn" style="padding:6px 12px;font-size:10px;font-weight:700;background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.4);color:#22c55e;" onclick="addNewBusinessType()">ADICIONAR</button>
+      </div>
+      <div id="business-types-list">
+  `;
+  
+  businessTypes.forEach(type => {
+    html += `
+      <div class="admin-list-item" style="font-size:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#fff;">${escapeHtml(type)}</span>
+        <button class="btn btn-danger" style="padding:4px 8px;font-size:9px;font-weight:700;" onclick="deleteBusinessType('${escapeHtml(type)}')">REMOVER</button>
+      </div>
+    `;
+  });
+  
+  html += `
+      </div>
+    </div>
+  `;
+  
+  body.innerHTML = html;
+}
+
+function addNewActionType() {
+  const input = document.getElementById('new-action-type');
+  const type = input.value.trim();
+  if (!type) {
+    alert('Digite um nome para o tipo de ação');
+    return;
+  }
+  
+  // Check if type already exists in seizures
+  const exists = (normalizeArrayData(seizures) || []).some(s => s.description === type);
+  if (exists) {
+    alert('Este tipo de ação já existe');
+    return;
+  }
+  
+  // Add a placeholder seizure with this type
+  seizures.push({ 
+    id: Date.now().toString(), 
+    description: type, 
+    member: [], 
+    location: '', 
+    imageUrl: '', 
+    boImageUrl: '', 
+    date: new Date().toISOString(), 
+    approved: true 
+  });
+  
+  saveData();
+  renderAdminManage();
+  alert('Tipo de ação adicionado com sucesso!');
+}
+
+function addNewBusinessType() {
+  const input = document.getElementById('new-business-type');
+  const type = input.value.trim();
+  if (!type) {
+    alert('Digite um nome para o tipo de negócio');
+    return;
+  }
+  
+  // Check if type already exists in negocios
+  const exists = (normalizeArrayData(negocios) || []).some(n => n.tipo === type);
+  if (exists) {
+    alert('Este tipo de negócio já existe');
+    return;
+  }
+  
+  // Add a placeholder negocio with this type
+  negocios.push({ 
+    id: Date.now().toString(), 
+    tipo: type, 
+    quantidade: 0, 
+    cliente: '', 
+    valor: 0, 
+    valorTotal: 0, 
+    date: new Date().toISOString() 
+  });
+  
+  saveData();
+  renderAdminManage();
+  alert('Tipo de negócio adicionado com sucesso!');
+}
+
+function toggleTipoInativo(tipo) {
+  if (!tipo) return;
+  const idx = tiposInativos.indexOf(tipo);
+  if (idx > -1) {
+    tiposInativos.splice(idx, 1);
+  } else {
+    tiposInativos.push(tipo);
+  }
+  saveData();
+  renderAdminManage();
+}
+
+function deleteActionType(type) {
+  if (!confirm(`Remover o tipo de ação "${type}"? Isso removerá todas as ações com este tipo.`)) return;
+  
+  // Remove all seizures with this type
+  seizures = seizures.filter(s => s.description !== type);
+  
+  // Remove from inactive list if present
+  const idx = tiposInativos.indexOf(type);
+  if (idx > -1) tiposInativos.splice(idx, 1);
+  
+  saveData();
+  renderAdminManage();
+  renderAll();
+}
+
+function deleteBusinessType(type) {
+  if (!confirm(`Remover o tipo de negócio "${type}"? Isso removerá todos os negócios com este tipo.`)) return;
+  
+  // Remove all negocios with this type
+  negocios = negocios.filter(n => n.tipo !== type);
+  
+  saveData();
+  renderAdminManage();
+  renderAll();
 }
 
 function renderAdminSettings() {

@@ -141,6 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
           </div>
           <div style="display:flex;gap:2px;margin-left:auto;">
             <div class="admin-tab">ORDEM</div>
+            <div class="admin-tab">GERENCIAR</div>
             <div class="admin-tab">CONFIG</div>
           </div>
         </div>
@@ -169,13 +170,14 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log('✓ Members overlay created successfully');
     
     const adminTabs = document.querySelectorAll('#admin-overlay .admin-tab');
-    if (adminTabs.length >= 6) {
+    if (adminTabs.length >= 7) {
       adminTabs[0].onclick = () => switchAdminTab('seizures');
       adminTabs[1].onclick = () => switchAdminTab('members');
       adminTabs[2].onclick = () => switchAdminTab('negocios');
       adminTabs[3].onclick = () => switchAdminTab('vehicles');
       adminTabs[4].onclick = () => switchAdminTab('rankOrder');
-      adminTabs[5].onclick = () => switchAdminTab('settings');
+      adminTabs[5].onclick = () => switchAdminTab('manage');
+      adminTabs[6].onclick = () => switchAdminTab('settings');
       console.log('✓ Admin tabs event listeners attached');
     }
     
