@@ -1059,9 +1059,10 @@
       border-color: rgba(30, 107, 35, 0.3);
     }
     .stat-live:hover { background: rgba(30, 107, 35, 0.18); border-color: var(--twitch-light); }
-    .stat-live .stat-value { color: var(--twitch); }
-    .stat-live .stat-label { color: var(--twitch); }
-    .stat-live .stat-value.update-active { color: var(--twitch-light); text-shadow: 0 0 12px rgba(30, 107, 35, 0.5); }
+    .stat-live .stat-value { color: #fff; }
+    .stat-live .stat-label { color: #fff; }
+    .stat-live .stat-value.update-active { color: #fff; text-shadow: 0 0 12px rgba(30, 107, 35, 0.5); }
+    .stat-live svg { filter: brightness(0) invert(1); }
     .stats-divider {
       width: 1px;
       min-height: 60px;
