@@ -803,11 +803,13 @@ function renderNegociosPanel() {
   const periodLabel = negFilterData ? `Últimos ${negFilterData} dias` : 'Todos os períodos';
   const tipoLabel = negFilterTipo ? ` | Tipo: ${negFilterTipo}` : '';
   const clienteLabel = negFilterCliente ? ` | Cliente: ${negFilterCliente}` : '';
-  html += `<div class="negocios-result-info">${periodLabel}${tipoLabel}${clienteLabel} — ${filtered.length} Venda${filtered.length !== 1 ? 's' : ''}</div>`;
+  const totalQtd = filtered.reduce((sum, n) => sum + Number(n.quantidade || 0), 0).toLocaleString('pt-BR');
+  html += `<div class="negocios-result-info">${periodLabel}${tipoLabel}${clienteLabel} — ${filtered.length} Venda${filtered.length !== 1 ? 's' : ''} | Qtd Total: ${totalQtd}</div>`;
 
   container.innerHTML = html;
 
   if (totalPages > 1) {
+    const totalQtd = filtered.reduce((sum, n) => sum + Number(n.quantidade || 0), 0).toLocaleString('pt-BR');
     const paginationHtml = `
       <div class="negocios-pagination-fixed">
         <button onclick="negPanelPage=${negPanelPage - 1};renderNegociosPanel()" ${negPanelPage <= 1 ? 'disabled' : ''} aria-label="Página anterior">❮</button>
@@ -815,7 +817,7 @@ function renderNegociosPanel() {
           `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}" aria-label="Página ${i}">${i}</button>`
         ).join('')}
         <button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''} aria-label="Próxima página">❯</button>
-        <span class="page-info">${start + 1}–${end} de ${filtered.length}</span>
+        <span class="page-info">${start + 1}–${end} de ${filtered.length} | Qtd: ${totalQtd}</span>
       </div>
     `;
     const existingFixed = document.querySelector('.negocios-pagination-fixed');
