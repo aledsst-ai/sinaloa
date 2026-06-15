@@ -613,10 +613,6 @@ function renderNegociosList() {
   for (const [t, q] of Object.entries(totals)) {
     if (q > topQtd) { topTipo = t; topQtd = q; }
   }
-  const summaryLine = topTipo
-    ? `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">${topTipo} Total ${topQtd.toLocaleString('pt-BR')}</div>`
-    : `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Nenhum negócio</div>`;
-  html = summaryLine + html;
   container.innerHTML = html;
 }
 
