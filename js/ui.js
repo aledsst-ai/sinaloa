@@ -809,15 +809,14 @@ function renderNegociosPanel() {
   container.innerHTML = html;
 
   if (totalPages > 1) {
-    const totalQtd = filtered.reduce((sum, n) => sum + Number(n.quantidade || 0), 0).toLocaleString('pt-BR');
     const paginationHtml = `
       <div class="negocios-pagination-fixed">
         <button onclick="negPanelPage=${negPanelPage - 1};renderNegociosPanel()" ${negPanelPage <= 1 ? 'disabled' : ''} aria-label="Página anterior">❮</button>
-        ${Array.from({length: totalPages}, (_, i) => i + 1).map(i => 
+        ${Array.from({length: totalPages}, (_, i) => i + 1).map(i =>
           `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}" aria-label="Página ${i}">${i}</button>`
         ).join('')}
         <button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''} aria-label="Próxima página">❯</button>
-        <span class="page-info">${start + 1}–${end} de ${filtered.length} | Qtd: ${totalQtd}</span>
+        <span class="page-info">${start + 1}–${end} de ${filtered.length}</span>
       </div>
     `;
     const existingFixed = document.querySelector('.negocios-pagination-fixed');
