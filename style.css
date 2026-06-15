@@ -939,7 +939,29 @@
       color: var(--accent);
     }
 
-    #home { padding: 80px 32px 40px; }
+    #home { 
+      padding: 80px 32px 40px; 
+      position: relative;
+      overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('assets/img/bgnew.png') center/cover no-repeat;
+      opacity: 0.15;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #home .container,
+    #home .home-banner,
+    #home .stats {
+      position: relative;
+      z-index: 1;
+    }
 
     .home-banner {
       max-width: 1200px;
