@@ -1055,12 +1055,15 @@
     .stat-label { font-size: 0.6rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.05em; font-weight: 600; }
     .stat-live {
       position: relative;
-      background: rgba(25, 89, 29, 0.05);
-      border-color: rgba(25, 89, 29, 0.15);
+      background: rgba(0, 0, 0, 0.75);
+      border-color: var(--twitch-light);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
-    .stat-live:hover { background: rgba(25, 89, 29, 0.12); border-color: rgba(25, 89, 29, 0.4); }
-    .stat-live .stat-value { color: var(--twitch-light); }
+    .stat-live:hover { background: rgba(0, 0, 0, 0.85); border-color: var(--twitch-light); }
+    .stat-live .stat-value { color: var(--twitch-light); text-shadow: 0 0 8px rgba(30, 107, 35, 0.6); }
     .stat-live .stat-label { color: var(--twitch-light); }
+    .stat-live .stat-value.update-active { color: #fff; text-shadow: 0 0 18px var(--twitch-light); }
     .stats-divider {
       width: 1px;
       min-height: 60px;
