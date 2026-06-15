@@ -312,7 +312,9 @@ function renderMembersList() {
       html += '</div></div>';
     }
   }
-  container.innerHTML = html;
+  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
+html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
+container.innerHTML = html;
 }
 
 function selectAdminMember(id) {
@@ -385,7 +387,9 @@ function renderVehiclesList() {
     </div>`;
   });
   html += '</div>';
-  container.innerHTML = html;
+  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
+html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
+container.innerHTML = html;
 }
 
 function renderAdminSeizures() {
@@ -464,7 +468,9 @@ function renderSeizuresList() {
     html += '<button onclick="adminSeizurePage=' + (adminSeizurePage + 1) + ';renderSeizuresList()" style="padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;' + (adminSeizurePage >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (adminSeizurePage >= totalPages ? 'disabled' : '') + '>❯</button>';
     html += '</div>';
   }
-  container.innerHTML = html;
+  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
+html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
+container.innerHTML = html;
 }
 
 function renderAdminNegocios() {
@@ -558,7 +564,22 @@ function renderNegociosList() {
     }
     html += '</div>';
   }
-  
+
+  // totais por tipo
+  const totals = {};
+  sorted.forEach(n => {
+    const tipo = n.tipo || '-';
+    totals[tipo] = (totals[tipo] || 0) + (Number(n.quantidade) || 0);
+  });
+  let topTipo = '';
+  let topQtd = 0;
+  for (const [t, q] of Object.entries(totals)) {
+    if (q > topQtd) { topTipo = t; topQtd = q; }
+  }
+  const summaryLine = topTipo
+    ? `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">${topTipo} Total ${topQtd.toLocaleString('pt-BR')}</div>`
+    : `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Nenhum negócio</div>`;
+  html = summaryLine + html;
   container.innerHTML = html;
 }
 
@@ -770,7 +791,9 @@ function renderSeizuresListMembers() {
     html += '<button onclick="membersSeizurePage=' + (membersSeizurePage + 1) + ';renderSeizuresListMembers()" style="padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;' + (membersSeizurePage >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (membersSeizurePage >= totalPages ? 'disabled' : '') + '>❯</button>';
     html += '</div>';
   }
-  container.innerHTML = html;
+  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
+html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
+container.innerHTML = html;
 }
 
 function addSeizureMembers() {

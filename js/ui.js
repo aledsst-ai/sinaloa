@@ -314,6 +314,22 @@ function renderNegocios() {
     </tr>`;
   });
   
+  const totals = {};
+  sorted.forEach(n => {
+    const tipo = n.tipo || '-';
+    totals[tipo] = (totals[tipo] || 0) + (Number(n.quantidade) || 0);
+  });
+  let topTipo = '';
+  let topQtd = 0;
+  for (const [t, q] of Object.entries(totals)) {
+    if (q > topQtd) { topTipo = t; topQtd = q; }
+  }
+  if (topTipo) {
+    html += `<tr class="negocios-row" style="font-weight:700;">
+      <td colspan="5" data-label="Resumo" style="text-align:center;">${escapeHtml(topTipo)} Total ${topQtd.toLocaleString('pt-BR')}</td>
+    </tr>`;
+  }
+
   if (blurredRows) blurredRows.innerHTML = html;
   if (lockedCard) lockedCard.style.display = '';
   
@@ -784,23 +800,31 @@ function renderNegociosPanel() {
 
   html += '</tbody></table>';
 
-  if (totalPages > 1) {
-    html += '<div class="negocios-pagination">';
-    html += `<button onclick="negPanelPage=${negPanelPage - 1};renderNegociosPanel()" ${negPanelPage <= 1 ? 'disabled' : ''}>❮</button>`;
-    for (let i = 1; i <= totalPages; i++) {
-      html += `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}">${i}</button>`;
-    }
-    html += `<button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''}>❯</button>`;
-    html += `<span class="page-info">${start + 1}–${end} de ${filtered.length}</span>`;
-    html += '</div>';
-  }
-
   const periodLabel = negFilterData ? `Últimos ${negFilterData} dias` : 'Todos os períodos';
   const tipoLabel = negFilterTipo ? ` | Tipo: ${negFilterTipo}` : '';
   const clienteLabel = negFilterCliente ? ` | Cliente: ${negFilterCliente}` : '';
   html += `<div class="negocios-result-info">${periodLabel}${tipoLabel}${clienteLabel} — ${filtered.length} Venda${filtered.length !== 1 ? 's' : ''}</div>`;
 
   container.innerHTML = html;
+
+  if (totalPages > 1) {
+    const paginationHtml = `
+      <div class="negocios-pagination-fixed">
+        <button onclick="negPanelPage=${negPanelPage - 1};renderNegociosPanel()" ${negPanelPage <= 1 ? 'disabled' : ''} aria-label="Página anterior">❮</button>
+        ${Array.from({length: totalPages}, (_, i) => i + 1).map(i => 
+          `<button onclick="negPanelPage=${i};renderNegociosPanel()" class="${i === negPanelPage ? 'active' : ''}" aria-label="Página ${i}">${i}</button>`
+        ).join('')}
+        <button onclick="negPanelPage=${negPanelPage + 1};renderNegociosPanel()" ${negPanelPage >= totalPages ? 'disabled' : ''} aria-label="Próxima página">❯</button>
+        <span class="page-info">${start + 1}–${end} de ${filtered.length}</span>
+      </div>
+    `;
+    const existingFixed = document.querySelector('.negocios-pagination-fixed');
+    if (existingFixed) existingFixed.remove();
+    document.querySelector('.negocios-panel-inner').insertAdjacentHTML('beforeend', paginationHtml);
+  } else {
+    const existingFixed = document.querySelector('.negocios-pagination-fixed');
+    if (existingFixed) existingFixed.remove();
+  }
 }
 
 document.addEventListener('keydown', function(e) {
