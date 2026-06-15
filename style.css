@@ -952,7 +952,7 @@
       right: 0;
       bottom: 0;
       background: url('https://i.ibb.co/Wp2RChcC/Chat-GPT-Image-14-de-jun-de-2026-19-00-03.png') center/cover no-repeat;
-      opacity: 0.15;
+      opacity: 1;
       z-index: 0;
       pointer-events: none;
     }
