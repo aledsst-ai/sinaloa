@@ -495,19 +495,26 @@ function renderAdminNegocios() {
       <div class="form-group"><label>TIPO *</label>
         <select id="new-neg-tipo" required>
           <option value="">-- Selecione --</option>
-          <option value=".300 BLK">.300 BLK</option>
-          <option value="9mm">9mm</option>
-          <option value=".45 ACP">.45 ACP</option>
-          <option value="5.56 NATO">5.56 NATO</option>
-          <option value="7.62x39">7.62x39</option>
-          <option value="12 Gauge">12 Gauge</option>
-          <option value=".308 Win">.308 Win</option>
-          <option value="Outro">Outro</option>
+          <option value="HK">HK</option>
+          <option value="Five">Five</option>
+          <option value="TEC">TEC</option>
+          <option value="MTAR">MTAR</option>
+          <option value="SMG">SMG</option>
+          <option value="Magnum">Magnum</option>
+          <option value="AK-47">AK-47</option>
+          <option value="G36">G36</option>
         </select>
         <input id="new-neg-tipo-custom" placeholder="Ou digite um tipo personalizado" style="margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:#f5f5f5;color:#1a1a1a;font-size:11px;outline:none;box-sizing:border-box;">
       </div>
       <div class="form-group"><label>QUANTIDADE *</label><input id="new-neg-quantidade" type="number" min="1" placeholder="Ex: 5000" required></div>
-      <div class="form-group"><label>CLIENTE *</label><input id="new-neg-cliente" placeholder="Nome do cliente" required></div>
+      <div class="form-group"><label>CLIENTE *</label>
+        <select id="new-neg-cliente" required>
+          <option value="">-- Selecione ou crie novo --</option>
+          ${[...new Set((normalizeArrayData(negocios) || []).map(n => n.cliente).filter(Boolean))].sort().map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
+          <option value="__new__">+ CRIAR NOVO</option>
+        </select>
+        <input id="new-neg-cliente-custom" placeholder="Nome do novo cliente" style="display:none;margin-top:4px;font-family:inherit;width:100%;padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,0.15);background:#f5f5f5;color:#1a1a1a;font-size:11px;outline:none;box-sizing:border-box;">
+      </div>
       <div class="form-group"><label>VALOR UNITÁRIO (R$) *</label><input id="new-neg-valor" type="number" step="0.01" min="0.01" placeholder="Ex: 2.50" required></div>
       <div class="form-group"><label>VALOR TOTAL</label><div id="new-neg-total-display" style="font-size:14px;font-weight:700;color:var(--accent);padding:6px 0;">R$ 0,00</div></div>
       <button class="btn btn-primary" onclick="addNegocio()">REGISTRAR NEGÓCIO</button>
@@ -531,7 +538,17 @@ function renderAdminNegocios() {
   
   document.getElementById('new-neg-tipo').addEventListener('change', function() {
     const customInput = document.getElementById('new-neg-tipo-custom');
-    if (this.value === 'Outro') {
+    if (this.value === '__new__') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.style.display = 'none';
+    }
+  });
+
+  document.getElementById('new-neg-cliente').addEventListener('change', function() {
+    const customInput = document.getElementById('new-neg-cliente-custom');
+    if (this.value === '__new__') {
       customInput.style.display = 'block';
       customInput.focus();
     } else {
@@ -989,11 +1006,13 @@ function addNegocio() {
   const customTipo = document.getElementById('new-neg-tipo-custom').value.trim();
   if (customTipo) tipo = customTipo;
   const quantidade = parseInt(document.getElementById('new-neg-quantidade').value, 10);
-  const cliente = document.getElementById('new-neg-cliente').value.trim();
+  let cliente = document.getElementById('new-neg-cliente').value.trim();
+  const customCliente = document.getElementById('new-neg-cliente-custom').value.trim();
+  if (cliente === '__new__' && customCliente) cliente = customCliente;
   const valor = parseFloat(document.getElementById('new-neg-valor').value);
   if (!tipo) { alert("Selecione ou digite o tipo"); return; }
   if (!quantidade || quantidade < 1) { alert("Informe a quantidade"); return; }
-  if (!cliente) { alert("Informe o cliente"); return; }
+  if (!cliente || cliente === '__new__') { alert("Informe o cliente"); return; }
   if (!valor || valor <= 0) { alert("Informe o valor unitário"); return; }
   const valorTotal = quantidade * valor;
   negocios.push({ id: Date.now().toString(), tipo, quantidade, cliente, valor, valorTotal, date: new Date().toISOString() });
