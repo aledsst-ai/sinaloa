@@ -911,7 +911,7 @@
       }
     }
     .section-title { font-size: 1.03rem; font-weight: 600; letter-spacing: 0.03em; }
-    .section-sub { font-size: 0.63rem; font-weight: bold; color: #811810; margin-top: 2px; }
+    .section-sub { font-size: 0.63rem; font-weight: bold; color: #fff; margin-top: 2px; }
     
     .filter-buttons {
       display: flex;
