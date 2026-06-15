@@ -414,7 +414,7 @@ function renderAdminSeizures() {
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="new-simg" placeholder="https://..." required></div>
-      <div class="form-group"><label>BO URL *</label><input id="new-bo" placeholder="https://..." required></div>
+      <div class="form-group"><label>ITENS URL *</label><input id="new-bo" placeholder="https://..." required></div>
       <button class="btn btn-primary" onclick="addSeizure()">REGISTRAR AÇÃO</button>
     </div>
     <div id="seizures-list"></div>
@@ -751,7 +751,7 @@ function renderMembersSeizures() {
       <div class="form-group"><label>MEMBROS RESPONSÁVEIS *</label><div id="m-new-members-container" style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding:6px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.08);" onclick="toggleMemberBadge(event)">${memberBadges}</div></div>
       <div class="form-group"><label>LOCAL *</label><input id="m-new-location" placeholder="Local" required></div>
       <div class="form-group"><label>IMAGEM URL *</label><input id="m-new-simg" placeholder="https://..." required></div>
-      <div class="form-group"><label>BO URL *</label><input id="m-new-bo" placeholder="https://..." required></div>
+      <div class="form-group"><label>ITENS URL *</label><input id="m-new-bo" placeholder="https://..." required></div>
       <button class="btn btn-primary" onclick="addSeizureMembers()">REGISTRAR AÇÃO</button>
     </div>
     <div id="seizures-list-members"></div>
