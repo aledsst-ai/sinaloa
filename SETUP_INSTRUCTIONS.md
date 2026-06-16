@@ -16,12 +16,10 @@ Remove-Item -Path "NOVO_PROJETO\.git" -Recurse -Force
 
 ## 3. Atualizar código
 
-### firebaseConfig (3 ficheiros)
-- `js/config.js`
-- `gallery.html`
-- `apreensoes.html`
+### firebaseConfig
+- `js/firebase-config.js`
 
-Substituir API keys pelo novo projeto Firebase.
+Substituir API keys pelo novo projeto Firebase neste arquivo compartilhado.
 
 ### Base de dados
 - Substituir todas as ocorrências de `sinaloa-data` pelo novo nome se desejado
@@ -31,7 +29,7 @@ Substituir API keys pelo novo projeto Firebase.
 Substituir `sinaloa_*` pelo prefixo do novo projeto em:
 - `js/config.js`
 - `gallery.html`
-- `apreensoes.html`
+- `acoes.html`
 
 ### Autenticação
 - `js/admin.js`: substituir `@sinaloa.app` pelo novo domínio

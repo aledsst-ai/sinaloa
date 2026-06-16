@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Sinaloa — Painel de Ações</title>
-  <meta name="description" content="Sinaloa - Dashboard com membros ao vivo, hierarquia, galeria, veículos e ações."/>
+  <meta name="description" content="Sinaloa - Dashboard com membros ao vivo, hierarquia, galeria e ações."/>
   <meta property="og:title" content="Sinaloa — Painel de Ações"/>
   <meta property="og:description" content="Painel de ações da Sinaloa."/>
   <meta property="og:image" content="https://sinaloa.aledsst.workers.dev/assets/img/logo.png"/>
@@ -13,9 +13,9 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260616-16">
   <script>
     try {
       if (sessionStorage.getItem('sinaloaSplashShown') === 'true') {
@@ -30,12 +30,13 @@
   <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init('fLSo_n1Pkn8NUxDZx')</script>
-  <script defer src="js/config.js"></script>
-  <script defer src="js/helpers.js"></script>
-  <script defer src="js/stream.js"></script>
-  <script defer src="js/ui.js"></script>
-  <script defer src="js/admin.js"></script>
-  <script defer src="js/app.js"></script>
+  <script defer src="js/firebase-config.js?v=20260616-10"></script>
+  <script defer src="js/config.js?v=20260616-10"></script>
+  <script defer src="js/helpers.js?v=20260616-10"></script>
+  <script defer src="js/stream.js?v=20260616-10"></script>
+  <script defer src="js/ui.js?v=20260616-10"></script>
+  <script defer src="js/admin.js?v=20260616-10"></script>
+  <script defer src="js/app.js?v=20260616-10"></script>
 </head>
 <body>
 
@@ -63,7 +64,6 @@
       <li><a href="#live">Ao vivo</a></li>
       <li><a href="#hierarchy">Hierarquia</a></li>
       <li><a href="#negocios">Negócios</a></li>
-      <li><a href="#vehicles">Veículos</a></li>
       <li><a href="#seizures">Ações</a></li>
     </ul>
     <div class="nav-actions">
@@ -197,6 +197,10 @@
 
     <div class="negocios-card-locked" id="negocios-locked-card">
       <div class="negocios-blurred-content">
+        <div class="negocios-confidential-head">
+          <span>RELATÓRIO INTERNO</span>
+          <strong>CONFIDENCIAL</strong>
+        </div>
         <table class="negocios-table">
           <thead>
             <tr>
@@ -209,6 +213,12 @@
           </thead>
           <tbody id="negocios-blurred-rows"></tbody>
         </table>
+        <div class="negocios-secret-lines" aria-hidden="true">
+          <div><span>Rota operacional</span><strong>Setor Norte / Ponto 04</strong></div>
+          <div><span>Responsável</span><strong>Identidade protegida</strong></div>
+          <div><span>Status</span><strong>Validação financeira pendente</strong></div>
+          <div><span>Observação</span><strong>Dados liberados somente para gestão</strong></div>
+        </div>
       </div>
       <div class="negocios-lock-overlay">
         <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;margin-bottom:8px;opacity:0.6;">
@@ -247,7 +257,7 @@
     </div>
     <div id="seizures-content"></div>
     <div style="text-align: center; margin-top: 30px;">
-      <a href="apreensoes.html" class="btn btn-secondary" style="display: inline-block; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; background: rgba(156, 163, 175, 0.25); color: #d1d5db; border: 1.5px solid rgba(156, 163, 175, 0.5);">VER TODAS AS AÇÕES →</a>
+      <a href="acoes.html" class="btn actions-view-all">VER TODAS AS AÇÕES →</a>
     </div>
   </div>
 </section>

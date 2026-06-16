@@ -200,17 +200,14 @@ function switchAdminTab(tab) {
   } else if (tab === 'negocios') {
     tabs[2].classList.add('active');
     renderAdminNegocios();
-  } else if (tab === 'vehicles') {
-    tabs[3].classList.add('active');
-    renderAdminVehicles();
   } else if (tab === 'rankOrder') {
-    tabs[4].classList.add('active');
+    tabs[3].classList.add('active');
     renderAdminRankOrder();
   } else if (tab === 'manage') {
-    tabs[5].classList.add('active');
+    tabs[4].classList.add('active');
     renderAdminManage();
   } else if (tab === 'settings') {
-    tabs[6].classList.add('active');
+    tabs[5].classList.add('active');
     renderAdminSettings();
   }
 }
@@ -225,11 +222,8 @@ function switchMembersTab(tab) {
   } else if (tab === 'negocios') {
     tabs[1].classList.add('active');
     renderMembersNegocios();
-  } else if (tab === 'vehicles') {
-    tabs[2].classList.add('active');
-    renderMembersVehicles();
   } else if (tab === 'members') {
-    tabs[3].classList.add('active');
+    tabs[2].classList.add('active');
     renderMembersMembers();
   }
 }
@@ -372,43 +366,6 @@ function saveSelectedMember() {
   updateAllStreamStatus();
 }
 
-function renderAdminVehicles() {
-  const body = document.getElementById('admin-body');
-  body.innerHTML = `
-    <div class="form-card">
-      <h3 style="margin-bottom: 12px; font-size: 0.8rem; font-weight: 700;">ADICIONAR VEÍCULO</h3>
-      <div class="form-group"><label>MODELO</label><input id="new-vname" placeholder="Ex: BMW M5"></div>
-      <div class="form-group"><label>STATUS</label><select id="new-vstatus"><option value="disponivel">Disponível</option><option value="emuso">Em Uso</option><option value="manutencao">Manutenção</option></select></div>
-      <div class="form-group"><label>IMAGEM URL</label><input id="new-vimg" placeholder="https://..."></div>
-      <button class="btn btn-primary" onclick="addVehicle()">ADICIONAR VEÍCULO</button>
-    </div>
-    <div id="vehicles-list"></div>
-  `;
-  renderVehiclesList();
-}
-
-function renderVehiclesList() {
-  const container = document.getElementById('vehicles-list');
-  if (!vehicles.length) { container.innerHTML = '                    <div class="empty-card">Nenhum veículo</div>'; return; }
-  let html = '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;justify-content:center;">';
-  vehicles.forEach(v => {
-    html += `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;padding:0;flex:1;min-width:280px;max-width:100%;">
-      <div style="height:200px;display:flex;align-items:center;justify-content:center;background:#0a0a0a;overflow:hidden;"><img src="${escapeHtml(v.imageUrl)}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;display:block;" onerror="this.parentElement.style.display='none'"></div>
-      <div style="padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;">
-        <div style="min-width:0;flex:1;">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#fff;">${escapeHtml(v.name)}</div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${v.status === 'disponivel' ? 'Disponível' : v.status === 'emuso' ? 'Em Uso' : 'Manutenção'}</div>
-        </div>
-        <button class="btn btn-danger" style="padding:4px 10px;font-size:10px;font-weight:700;flex-shrink:0;" onclick="deleteVehicle('${v.id}')">REMOVER</button>
-      </div>
-    </div>`;
-  });
-  html += '</div>';
-  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
-html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
-container.innerHTML = html;
-}
-
 function renderAdminSeizures() {
   adminSeizurePage = 1;
   const body = document.getElementById('admin-body');
@@ -506,9 +463,7 @@ function renderSeizuresList() {
     html += '<button onclick="adminSeizurePage=' + (adminSeizurePage + 1) + ';renderSeizuresList()" style="padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;' + (adminSeizurePage >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (adminSeizurePage >= totalPages ? 'disabled' : '') + '>❯</button>';
     html += '</div>';
   }
-  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
-html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
-container.innerHTML = html;
+  container.innerHTML = html;
 }
 
 function renderAdminNegocios() {
@@ -1012,9 +967,7 @@ function renderSeizuresListMembers() {
     html += '<button onclick="membersSeizurePage=' + (membersSeizurePage + 1) + ';renderSeizuresListMembers()" style="padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;' + (membersSeizurePage >= totalPages ? 'opacity:0.3;cursor:default;' : '') + '" ' + (membersSeizurePage >= totalPages ? 'disabled' : '') + '>❯</button>';
     html += '</div>';
   }
-  const totalQuantity = sorted.reduce((sum, n) => sum + (Number(n.quantidade) || 0), 0);
-html += `<div class="admin-list-item" style="font-size:11px; font-weight:bold; padding:8px; background:#f0f0f0; border-radius:4px; text-align:center;">Total Quantidade: ${totalQuantity.toLocaleString('pt-BR')}</div>`;
-container.innerHTML = html;
+  container.innerHTML = html;
 }
 
 function addSeizureMembers() {
@@ -1036,11 +989,6 @@ function addSeizureMembers() {
   membersSeizurePage = 1;
   saveData();
   renderMembersSeizures();
-}
-
-function renderMembersVehicles() {
-  const body = document.getElementById('members-body');
-  body.innerHTML = `<div class="empty-card">⚠️ Acesso restrito. Utilize o painel ADMIN para gerenciar veículos.</div>`;
 }
 
 function renderMembersNegocios() {
@@ -1130,25 +1078,6 @@ function deleteMember(id) {
   saveData();
   renderAll();
   renderAdminMembers();
-}
-
-function addVehicle() {
-  const name = document.getElementById('new-vname').value.trim();
-  const status = document.getElementById('new-vstatus').value;
-  const imageUrl = document.getElementById('new-vimg').value.trim();
-  if (!name) { alert("Informe o modelo"); return; }
-  vehicles.push({ id: Date.now().toString(), name, status, imageUrl });
-  saveData();
-  renderAll();
-  renderAdminVehicles();
-}
-
-function deleteVehicle(id) {
-  if (!confirm("Remover este veículo?")) return;
-  vehicles = vehicles.filter(v => v.id !== id);
-  saveData();
-  renderAll();
-  renderAdminVehicles();
 }
 
 function addSeizure() {
@@ -1317,7 +1246,7 @@ function notifyPasswordChange(type, newPwd) {
     type: type,
     time: now,
     new_password: newPwd
-  }).then(function(r) { console.log('EmailJS ok:', r.status); }, function(e) { console.error('EmailJS error:', e); });
+  }).then(function(r) { debugLog('EmailJS ok:', r.status); }, function(e) { console.error('EmailJS error:', e); });
 }
 
 function toggleMemberBadge(e) {

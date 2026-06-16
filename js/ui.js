@@ -262,25 +262,6 @@ function goToCarouselPage(type, page) {
   }
 }
 
-function renderVehicles() {
-  const sorted = [...vehicles].sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
-  const container = document.getElementById('vehicles-content');
-  if (!sorted.length) {
-    container.innerHTML = '<div class="empty-card">Nenhum veículo cadastrado</div>';
-    return;
-  }
-  
-  container.innerHTML = '<div class="simple-grid">' + sorted.map((item, idx) => `
-    <div class="vehicle-card reveal" style="transition-delay: ${idx * 0.03}s" onclick="openModal('${escapeHtml(item.imageUrl)}')">
-      ${item.imageUrl ? `<img class="vehicle-img" src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='https://placehold.co/600x400/1a1a1a/555?text=Sem+Imagem'">` : '<div class="vehicle-img placeholder">🚗</div>'}
-      <div class="vehicle-card-overlay"></div>
-      <div class="vehicle-card-content">
-        <div class="vehicle-name">${escapeHtml(item.name)}</div>
-      </div>
-    </div>
-  `).join('') + '</div>';
-}
-
 const NEGOCIOS_PAGE_HOME = 10;
 
 function renderNegocios() {
@@ -291,7 +272,22 @@ function renderNegocios() {
   const sorted = normalizeArrayData(negocios).sort((a,b) => new Date(b.date) - new Date(a.date));
   
   if (!sorted.length) {
-    if (blurredRows) blurredRows.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum negócio registrado</td></tr>';
+    if (blurredRows) {
+      blurredRows.innerHTML = [
+        ['9mm Premium', '1.240', 'Cliente reservado', 'R$ 000,00', 'R$ 000.000,00'],
+        ['.45 ACP', '780', 'Operação sigilosa', 'R$ 000,00', 'R$ 000.000,00'],
+        ['5.56 NATO', '2.600', 'Canal interno', 'R$ 000,00', 'R$ 000.000,00'],
+        ['12 Gauge', '460', 'Registro protegido', 'R$ 000,00', 'R$ 000.000,00']
+      ].map((row, idx) => `<tr class="negocios-row ${idx % 2 === 0 ? 'negocios-row--even' : ''}">
+        <td data-label="Tipo">${row[0]}</td>
+        <td data-label="Quantidade">${row[1]}</td>
+        <td data-label="Cliente">${row[2]}</td>
+        <td data-label="Valor">${row[3]}</td>
+        <td data-label="Valor Total">${row[4]}</td>
+      </tr>`).join('');
+    }
+    if (lockedCard) lockedCard.style.display = '';
+    observeRevealElements();
     return;
   }
   
@@ -392,7 +388,7 @@ function renderSeizures() {
     
     observeRevealElements();
   } catch (error) {
-    console.error('❌ Erro ao renderizar apreensões:', error);
+    console.error('❌ Erro ao renderizar ações:', error);
   }
 }
 
@@ -457,7 +453,6 @@ function animateStatValue(id, value) {
 function renderAll() {
   try { renderHierarchy(); } catch(e) { console.error('renderHierarchy error:', e); }
   try { renderLiveMembers(); } catch(e) { console.error('renderLiveMembers error:', e); }
-  try { renderVehicles(); } catch(e) { console.error('renderVehicles error:', e); }
   try { renderSeizures(); } catch(e) { console.error('renderSeizures error:', e); }
   try { renderNegocios(); } catch(e) { console.error('renderNegocios error:', e); }
   updateStats();
@@ -467,7 +462,7 @@ let currentMemberProfile = null;
 
 function openMemberProfile(memberName) {
   try {
-    console.log('🔍 Abrindo perfil do membro:', memberName);
+    debugLog('🔍 Abrindo perfil do membro:', memberName);
     const member = members.find(m => m.name === memberName);
     
     if (!member) {
@@ -484,7 +479,7 @@ function openMemberProfile(memberName) {
     
     if (panel) {
       panel.classList.add('active');
-      console.log('✓ Painel ativado');
+      debugLog('✓ Painel ativado');
     }
     if (backdrop) {
       backdrop.classList.add('active');
@@ -526,7 +521,7 @@ function handleProfileEscape(e) {
 
 function renderMemberProfile(member) {
   try {
-    console.log('🎨 Renderizando perfil de:', member.name);
+    debugLog('🎨 Renderizando perfil de:', member.name);
     const content = document.getElementById('member-profile-content');
     if (!content) {
       console.error('❌ Elemento member-profile-content não encontrado');
@@ -540,7 +535,7 @@ function renderMemberProfile(member) {
     });
     const avatarUrl = member.avatarUrl || 'https://placehold.co/80x80/1a1a1a/19591d?text=👤';
     
-    console.log(`📊 ${member.name} tem ${seizureCount} apreensões`);
+    debugLog(`📊 ${member.name} tem ${seizureCount} ações`);
     
     let seizuresHtml = '';
     if (memberSeizures.length === 0) {
@@ -607,11 +602,11 @@ function renderMemberProfile(member) {
         <div class="seizures-carousel-container">
           ${seizuresHtml}
         </div>
-        <div style="text-align:center;margin-top:12px;"><a href="apreensoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;">VER MAIS AÇÕES →</a></div>
+        <div style="text-align:center;margin-top:12px;"><a href="acoes.html?member=${encodeURIComponent(member.name)}" style="font-size:11px;color:var(--accent);text-decoration:none;font-weight:600;">VER MAIS AÇÕES →</a></div>
       </div>
     `;
 
-    console.log('✓ Perfil renderizado com sucesso');
+    debugLog('✓ Perfil renderizado com sucesso');
   } catch (error) {
     console.error('❌ Erro ao renderizar perfil:', error);
     const content = document.getElementById('member-profile-content');
@@ -673,14 +668,6 @@ function submitNegociosAuth() {
       btn.disabled = false;
       btn.textContent = 'LIBERAR';
     });
-}
-
-function openNegociosPanel() {
-  const panel = document.getElementById('negocios-panel');
-  if (panel) panel.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  negPanelPage = 1;
-  renderNegociosPanel();
 }
 
 function closeNegociosPanel() {

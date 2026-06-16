@@ -12,26 +12,17 @@
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260616-16">
   <style>
     body { padding-top: 100px; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="js/helpers.js"></script>
+  <script src="js/firebase-config.js?v=20260616-10"></script>
+  <script src="js/helpers.js?v=20260616-10"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyD5PfisZJ90gXsff_nVhyfLU78WmPl46Wo",
-      authDomain: "sinaloa-mtp.firebaseapp.com",
-      databaseURL: "https://sinaloa-mtp-default-rtdb.firebaseio.com",
-      projectId: "sinaloa-mtp",
-      storageBucket: "sinaloa-mtp.firebasestorage.app",
-      messagingSenderId: "1006569530779",
-      appId: "1:1006569530779:web:2e76d739e1d75987cb6d3e",
-      measurementId: "G-402327Y5EJ"
-    };
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(window.SINALOA_FIREBASE_CONFIG);
   </script>
 </head>
 <body>
